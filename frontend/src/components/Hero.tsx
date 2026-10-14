@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, MapPin, Calendar, Clock, Star, ShieldCheck } from 'lucide-react';
+import { Search, MapPin, Calendar, Clock, Trophy } from 'lucide-react';
 
 export const Hero: React.FC = () => {
   return (
@@ -28,7 +28,7 @@ export const Hero: React.FC = () => {
 
           <div className="pt-2 flex flex-wrap items-center justify-center gap-4 w-full sm:w-auto">
             <a href="#meciuri-active" className="w-full sm:w-auto px-8 py-4 rounded-xl bg-primary-container text-on-primary-container font-bold flex items-center justify-center gap-2 shadow-[0_0_24px_-2px_rgba(16,185,129,0.45)] hover:scale-[1.02] transition-all">
-              <span className="material-symbols-outlined text-[20px]">sports_soccer</span>
+              <Trophy className="w-5 h-5" />
               Caută un Meci Deschis
             </a>
             <a href="#panou-proprietari" className="w-full sm:w-auto px-8 py-4 rounded-xl bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-semibold flex items-center justify-center gap-2 transition-all shadow-md">

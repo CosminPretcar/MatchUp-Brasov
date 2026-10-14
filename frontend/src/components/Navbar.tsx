@@ -1,4 +1,5 @@
 import React from 'react';
+import logoNavbar from '../assets/logo_navbar.svg';
 
 export const Navbar: React.FC = () => {
   return (
@@ -6,7 +7,7 @@ export const Navbar: React.FC = () => {
       <div className="h-20 max-w-7xl mx-auto px-6 flex items-center justify-between gap-4">
         <div className="flex items-center gap-2">
           <span className="font-headline text-lg text-on-surface tracking-tight font-bold">
-            MatchUp <span className="text-primary">Brașov</span>
+            <img src={logoNavbar} alt="Matchup Brașov" className="h-16 w-auto object-contain" />
           </span>
         </div>
         <nav className="hidden lg:flex items-center gap-1 p-1">

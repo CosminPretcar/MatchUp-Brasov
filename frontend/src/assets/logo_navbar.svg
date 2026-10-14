@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 200" width="760" height="200">
+  <defs>
+    <!-- Background Card & Glow -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#141C28"/>
+      <stop offset="50%" stop-color="#0F131C"/>
+      <stop offset="100%" stop-color="#0A0D14"/>
+    </linearGradient>
+
+    <!-- Radial back glow behind mark -->
+    <radialGradient id="markAura" cx="35%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#10B981" stop-opacity="0.22"/>
+      <stop offset="50%" stop-color="#10B981" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#10B981" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Vibrant Emerald Brand Gradient -->
+    <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5BF3B4"/>
+      <stop offset="40%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+
+    <!-- Electric Neon Bolt Gradient -->
+    <linearGradient id="neonVoltGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E4FF66"/>
+      <stop offset="45%" stop-color="#B2FF2E"/>
+      <stop offset="100%" stop-color="#73D900"/>
+    </linearGradient>
+
+    <!-- Bolt Facet Highlight (Dual-tone dynamic surface) -->
+    <linearGradient id="neonHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.85"/>
+      <stop offset="60%" stop-color="#CCFF33" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#65CC00" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Pitch Field Gradient -->
+    <linearGradient id="pitchFieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#182332"/>
+      <stop offset="100%" stop-color="#0D131D"/>
+    </linearGradient>
+
+    <!-- Pill Badge Glass Gradient -->
+    <linearGradient id="pillBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#132622"/>
+      <stop offset="100%" stop-color="#0E1B18"/>
+    </linearGradient>
+
+    <!-- Neon Glow Filter -->
+    <filter id="neonGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+
+    <filter id="subtleDrop" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- ==================== LOGO EMBLEM (LEFT) ==================== -->
+  <g id="emblem" transform="translate(56, 26)">
+    <!-- Outer Shield Ambient Glow Border -->
+    <path d="M74 4 L138 38 L138 110 L74 144 L10 110 L10 38 Z" 
+          fill="none" 
+          stroke="url(#emeraldGrad)" 
+          stroke-width="5" 
+          stroke-linejoin="round"
+          stroke-opacity="0.25"/>
+
+    <!-- Main Hexagonal Stadium Pitch Shield -->
+    <path d="M74 7 L134 39 L134 107 L74 139 L14 107 L14 39 Z" 
+          fill="url(#pitchFieldGrad)" 
+          stroke="#26394F" 
+          stroke-width="2.5" 
+          stroke-linejoin="round"/>
+
+    <!-- Inner Emerald Accent Track -->
+    <path d="M74 14 L126 42 L126 104 L74 132 L22 104 L22 42 Z" 
+          fill="none" 
+          stroke="url(#emeraldGrad)" 
+          stroke-width="1.8" 
+          stroke-linejoin="round"
+          stroke-opacity="0.85"/>
+
+    <!-- Precise Football Pitch Markings -->
+    <g opacity="0.4">
+      <!-- Halfway Line with dashes -->
+      <line x1="22" y1="73" x2="126" y2="73" stroke="#486284" stroke-width="2" stroke-dasharray="3,3"/>
+      
+      <!-- Center Circle -->
+      <circle cx="74" cy="73" r="22" fill="none" stroke="#486284" stroke-width="2"/>
+      
+      <!-- Center Spot -->
+      <circle cx="74" cy="73" r="3" fill="#5BF3B4"/>
+
+      <!-- Penalty Area (North Goal) -->
+      <path d="M52 14 L52 38 L96 38 L96 14" fill="none" stroke="#486284" stroke-width="1.8"/>
+      <!-- Penalty Box Arc -->
+      <path d="M60 38 A 14 14 0 0 0 88 38" fill="none" stroke="#486284" stroke-width="1.6"/>
+
+      <!-- Penalty Area (South Goal) -->
+      <path d="M52 132 L52 108 L96 108 L96 132" fill="none" stroke="#486284" stroke-width="1.8"/>
+      <!-- Penalty Box Arc -->
+      <path d="M60 108 A 14 14 0 0 1 88 108" fill="none" stroke="#486284" stroke-width="1.6"/>
+    </g>
+
+    <!-- Electric Lightning Spear Symbol (Matchmaking & High Voltage Action) -->
+    <g filter="url(#subtleDrop)">
+      <!-- Main Bolt Body -->
+      <path d="M79 17 L39 74 L69 74 L58 129 L109 63 L77 63 Z" 
+            fill="url(#neonVoltGrad)" 
+            filter="url(#neonGlow)"
+            stroke="#0C1118" 
+            stroke-width="3" 
+            stroke-linejoin="round"/>
+
+      <!-- Dimensional Highlight Facet (Left side shine) -->
+      <path d="M79 17 L39 74 L69 74 L58 129 L70 70 L79 17 Z" 
+            fill="url(#neonHighlight)" 
+            opacity="0.65"
+            stroke-linejoin="round"/>
+    </g>
+
+    <!-- Brașov Apex Location Beacon -->
+    <circle cx="74" cy="27" r="11" fill="#10B981" fill-opacity="0.25"/>
+    <circle cx="74" cy="27" r="7.5" fill="none" stroke="#5BF3B4" stroke-width="2"/>
+    <circle cx="74" cy="27" r="4" fill="#FFFFFF"/>
+  </g>
+
+  <!-- ==================== TYPOGRAPHY & BRANDING (RIGHT) ==================== -->
+  <g id="brandTypography" transform="translate(236, 74)">
+    
+    <!-- Primary Title Line ("MatchUp" + "BRAȘOV" Pill) -->
+    <g id="titleRow">
+      <!-- "MatchUp" Main Wordmark -->
+      <text x="0" y="58" 
+            font-family="'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif" 
+            font-size="90" 
+            font-weight="800" 
+            letter-spacing="-1.5">
+        <tspan fill="#FFFFFF">Match</tspan><tspan fill="url(#emeraldGrad)">Up</tspan>
+      </text>
+
+      <!-- Sleek "BRAȘOV" Sports Badge with GPS Beacon -->
+    </g>
+
+  </g>
+</svg>
