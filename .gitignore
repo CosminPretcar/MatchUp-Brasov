@@ -1,17 +1,14 @@
-# --- Node / Frontend ---
-frontend/node_modules/
-frontend/dist/
-frontend/.next/
-frontend/.env.local
+# .NET Build outputs
+**/bin/
+**/obj/
+*.user
+*.suo
 
-# --- .NET / Backend ---
-backend/bin/
-backend/obj/
-backend/.vs/
-backend/*.user
-backend/*.suo
-backend/appsettings.Development.json
+# Environment variables
+.env
+*.env.local
 
-# --- OS Specific ---
+# Node / React
+node_modules/
+**/dist/
 .DS_Store
-Thumbs.db
