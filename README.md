@@ -70,18 +70,28 @@ DB_PORT=5432
 DB_NAME=matchup
 DB_USER=postgres
 DB_PASSWORD=your-password
+JWT_KEY=replace-with-a-random-secret-at-least-32-bytes-long
 ```
 
 `.env` files are ignored by Git. Do not commit real credentials.
 
-The frontend currently calls the local API at
-`http://localhost:5056/api/auth`. If the API is hosted elsewhere, update the
-API base URL in `frontend/src/components/AuthModal.tsx` or move it to a
-runtime/build-time environment variable before deploying.
+The frontend reads the API base URL from `VITE_API_URL`; copy
+`frontend/.env.example` to `frontend/.env.local` for local development. Use an
+HTTPS URL, such as `https://localhost:7093`, and never commit the resulting
+`.env.local` file.
 
 ## Running locally
 
 ### Start the backend
+
+**First time only** — trust the .NET development certificate so the browser
+accepts HTTPS on localhost:
+
+```bash
+dotnet dev-certs https --trust
+```
+
+Confirm the Windows security dialog that appears.
 
 From the repository root:
 
@@ -89,11 +99,10 @@ From the repository root:
 cd backend/MatchUp.Api
 dotnet restore
 dotnet ef database update
-dotnet run --launch-profile http
+dotnet run --launch-profile https
 ```
 
-The HTTP API is available at `http://localhost:5056`. The HTTPS launch profile
-uses `https://localhost:7093`.
+The API is available at `https://localhost:7093`.
 
 ### Start the frontend
 
@@ -118,7 +127,9 @@ Open the Vite development URL shown in the terminal, usually
 Registration requires an email address, a password of at least six characters,
 a full name, and an optional phone number. The supported roles are `Player`,
 `FieldOwner`, and `Admin` at the domain-model level; the current frontend
-registration form exposes `Player` and `FieldOwner`.
+registration form exposes `Player` and `FieldOwner`. Public registration cannot
+create `Admin` accounts. The API returns a short-lived JWT after successful
+registration or login; protected endpoints must validate this token server-side.
 
 ## Available scripts
 

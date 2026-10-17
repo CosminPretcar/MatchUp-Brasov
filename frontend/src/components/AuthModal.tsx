@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   X, Zap, LogIn, UserPlus, Mail, Lock, Eye, EyeOff, 
   ArrowRight, Users, Building2, User, Phone, CheckCircle2, ShieldCheck 
@@ -7,11 +7,21 @@ import {
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess?: (userData: any) => void;
+  onSuccess?: (userData: AuthenticatedUser) => void;
+  defaultTab?: 'login' | 'register';
 }
 
-export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess }) => {
-  const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
+interface AuthenticatedUser {
+  id: string;
+  email: string;
+  fullName: string;
+  role: string;
+  message: string;
+  token: string;
+}
+
+export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess, defaultTab = 'login' }) => {
+  const [activeTab, setActiveTab] = useState<'login' | 'register'>(defaultTab);
   const [showPassword, setShowPassword] = useState(false);
   const [selectedRole, setSelectedRole] = useState<'Player' | 'FieldOwner'>('Player');
 
@@ -24,6 +34,28 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
   const [regPhone, setRegPhone] = useState('');
   const [regPassword, setRegPassword] = useState('');
 
+  useEffect(() => {
+    if (isOpen) {
+      setActiveTab(defaultTab);
+    }
+  }, [isOpen, defaultTab]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
   // UI feedback state
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
@@ -31,7 +63,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
   if (!isOpen) return null;
 
   // Local backend endpoint
-  const API_BASE_URL = 'http://localhost:5056/api/auth';
+  const API_BASE_URL = `${import.meta.env.VITE_API_URL || 'https://localhost:7093'}/api/auth`;
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,10 +80,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
         }),
       });
 
-      const data = await response.json();
+      const data = await response.json().catch(() => null);
 
       if (!response.ok) {
-        throw new Error(data.message || 'Autentificare eșuată.');
+        throw new Error(data?.message || 'Autentificare eșuată.');
       }
 
       // Store the authenticated user in localStorage
@@ -83,15 +115,15 @@ const handleRegister = async (e: React.FormEvent) => {
       }),
     });
 
-    const data = await response.json();
+    const data = await response.json().catch(() => null);
 
     if (!response.ok) {
       // Handle validation errors returned by the backend
-      if (data.errors) {
+      if (data?.errors) {
         const firstError = Object.values(data.errors)[0] as string[];
         throw new Error(firstError[0] || 'Datele introduse sunt invalide.');
       }
-      throw new Error(data.message || 'Înregistrare eșuată.');
+      throw new Error(data?.message || 'Înregistrare eșuată.');
     }
 
     localStorage.setItem('user', JSON.stringify(data));

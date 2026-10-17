@@ -1,5 +1,9 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MatchUp.Api.Data;
 using MatchUp.Api.DTOs;
 using MatchUp.Api.Models;
@@ -11,15 +15,22 @@ namespace MatchUp.Api.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly AppDbContext _context;
+    private readonly IConfiguration _configuration;
 
-    public AuthController(AppDbContext context)
+    public AuthController(AppDbContext context, IConfiguration configuration)
     {
         _context = context;
+        _configuration = configuration;
     }
 
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {
+        if (!Enum.IsDefined(dto.Role) || dto.Role == UserRole.Admin)
+        {
+            return BadRequest(new { message = "Rolul selectat nu poate fi atribuit prin înregistrare publică." });
+        }
+
         // 1. Check whether the email already exists
         if (await _context.Users.AnyAsync(u => u.Email == dto.Email))
         {
@@ -48,7 +59,8 @@ public class AuthController : ControllerBase
             Email = user.Email,
             FullName = user.FullName,
             Role = user.Role.ToString(),
-            Message = "Înregistrare reușită!"
+            Message = "Înregistrare reușită!",
+            Token = CreateToken(user)
         });
     }
 
@@ -75,7 +87,33 @@ public class AuthController : ControllerBase
             Email = user.Email,
             FullName = user.FullName,
             Role = user.Role.ToString(),
-            Message = "Autentificare reușită!"
+            Message = "Autentificare reușită!",
+            Token = CreateToken(user)
         });
+    }
+
+    private string CreateToken(User user)
+    {
+        var key = _configuration["JWT_KEY"];
+        if (string.IsNullOrWhiteSpace(key))
+        {
+            throw new InvalidOperationException("JWT_KEY is not configured.");
+        }
+
+        var claims = new[]
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Role, user.Role.ToString())
+        };
+        var credentials = new SigningCredentials(
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+            SecurityAlgorithms.HmacSha256);
+        var token = new JwtSecurityToken(
+            claims: claims,
+            expires: DateTime.UtcNow.AddHours(1),
+            signingCredentials: credentials);
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }

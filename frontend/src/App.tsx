@@ -13,6 +13,7 @@ import { AuthModal } from './components/AuthModal';
 
 export function App() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authTab, setAuthTab] = useState<'login' | 'register'>('login');
   const [user, setUser] = useState(() => {
     const saved = localStorage.getItem('user');
     return saved ? JSON.parse(saved) : null;
@@ -23,11 +24,16 @@ export function App() {
     setUser(null);
   };
 
+  const handleOpenAuth = (tab: 'login' | 'register' = 'login') => {
+    setAuthTab(tab);
+    setIsAuthModalOpen(true);
+  };
+
   return (
     <div className="min-h-screen bg-background text-on-background selection:bg-primary-container selection:text-on-primary-container">
       <Navbar 
         user={user} 
-        onOpenAuth={() => setIsAuthModalOpen(true)} 
+        onOpenAuth={handleOpenAuth} 
         onLogout={handleLogout} 
       />
       <main className="pt-20">
@@ -47,6 +53,7 @@ export function App() {
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
         onSuccess={(userData) => setUser(userData)}
+        defaultTab={authTab}
       />
     </div>
   );

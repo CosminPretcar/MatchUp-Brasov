@@ -3,7 +3,7 @@ import { Search, MapPin, Calendar, Clock, Trophy } from 'lucide-react';
 
 export const Hero: React.FC = () => {
   return (
-    <section className="relative w-full overflow-hidden px-6 pb-10 pt-6 md:pt-12">
+    <section id="gaseste-terenuri" className="relative w-full overflow-hidden px-6 pb-10 pt-6 md:pt-12">
       {/* Glow effects */}
       <div className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[720px] h-[360px] bg-primary/15 blur-[120px] rounded-full"></div>
       <div className="pointer-events-none absolute top-72 -left-32 w-80 h-80 bg-secondary/10 blur-[100px] rounded-full"></div>
