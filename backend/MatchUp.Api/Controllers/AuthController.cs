@@ -20,16 +20,16 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {
-        // 1. Verificăm dacă email-ul există deja
+        // 1. Check whether the email already exists
         if (await _context.Users.AnyAsync(u => u.Email == dto.Email))
         {
             return BadRequest(new { message = "Un cont cu acest email există deja." });
         }
 
-        // 2. Criptăm parola cu BCrypt
+        // 2. Hash the password with BCrypt
         string passwordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
 
-        // 3. Creăm entitatea User
+        // 3. Create the User entity
         var user = new User
         {
             Email = dto.Email,
@@ -55,14 +55,14 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
-        // 1. Căutăm utilizatorul după email
+        // 1. Find the user by email
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
         if (user == null)
         {
             return Unauthorized(new { message = "Email sau parolă incorectă." });
         }
 
-        // 2. Verificăm parola criptată
+        // 2. Verify the hashed password
         bool isPasswordValid = BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash);
         if (!isPasswordValid)
         {

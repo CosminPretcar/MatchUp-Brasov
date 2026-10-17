@@ -29,7 +29,7 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
           </span>
         </div>
 
-        {/* Meniu Navigare Desktop */}
+        {/* Desktop navigation menu */}
         <nav className="hidden lg:flex items-center gap-1 p-1">
           {navigationLinks.map((link) => (
             <a key={link.href} href={link.href} className="px-4 py-2 rounded-xl text-sm font-semibold text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all">
@@ -38,7 +38,7 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
           ))}
         </nav>
 
-        {/* Zona de Autentificare Desktop */}
+        {/* Desktop authentication area */}
         <div className="hidden lg:flex items-center gap-4">
           {user ? (
             <div className="flex items-center gap-3">
@@ -72,7 +72,7 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
           )}
         </div>
 
-        {/* Buton Meniu Mobil */}
+        {/* Mobile menu button */}
         <button
           type="button"
           className="lg:hidden p-2 rounded-xl text-on-surface hover:bg-surface-container transition-colors"
@@ -84,7 +84,7 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
         </button>
       </div>
 
-      {/* Meniu Mobil Dropdown */}
+      {/* Mobile menu dropdown */}
       {isMenuOpen && (
         <nav className="lg:hidden border-t border-surface-container-high bg-surface px-6 py-4 shadow-xl">
           <div className="flex flex-col gap-2">

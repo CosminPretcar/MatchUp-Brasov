@@ -15,7 +15,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
   const [showPassword, setShowPassword] = useState(false);
   const [selectedRole, setSelectedRole] = useState<'Player' | 'FieldOwner'>('Player');
 
-  // Form States
+  // Form state
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
 
@@ -24,13 +24,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
   const [regPhone, setRegPhone] = useState('');
   const [regPassword, setRegPassword] = useState('');
 
-  // UI feedback states
+  // UI feedback state
   const [errorMsg, setErrorMsg] = useState('');
   const [loading, setLoading] = useState(false);
 
   if (!isOpen) return null;
 
-  // Endpoint backend local
+  // Local backend endpoint
   const API_BASE_URL = 'http://localhost:5056/api/auth';
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -54,7 +54,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
         throw new Error(data.message || 'Autentificare eșuată.');
       }
 
-      // Salvăm utilizatorul autentificat în localStorage
+      // Store the authenticated user in localStorage
       localStorage.setItem('user', JSON.stringify(data));
       if (onSuccess) onSuccess(data);
       onClose();
@@ -86,7 +86,7 @@ const handleRegister = async (e: React.FormEvent) => {
     const data = await response.json();
 
     if (!response.ok) {
-      // Dacă backend-ul trimite erori de validare
+      // Handle validation errors returned by the backend
       if (data.errors) {
         const firstError = Object.values(data.errors)[0] as string[];
         throw new Error(firstError[0] || 'Datele introduse sunt invalide.');
@@ -295,7 +295,7 @@ const handleRegister = async (e: React.FormEvent) => {
                 </div>
               </div>
 
-              {/* Nume complet */}
+              {/* Full name */}
               <div className="space-y-1.5">
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
                   Nume și Prenume

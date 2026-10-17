@@ -42,7 +42,7 @@ export function App() {
       </main>
       <Footer />
 
-      {/* Modalul de Autentificare/Înregistrare */}
+      {/* Authentication/registration modal */}
       <AuthModal
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
