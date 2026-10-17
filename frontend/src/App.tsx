@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { StatsTicker } from './components/StatsTicker';
@@ -10,14 +10,36 @@ import { Faq } from './components/Faq';
 import { FinalCta } from './components/FinalCta';
 import { Footer } from './components/Footer';
 import { AuthModal } from './components/AuthModal';
+import { isTokenExpired, msUntilTokenExpiry } from './utils/auth';
 
 export function App() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authTab, setAuthTab] = useState<'login' | 'register'>('login');
   const [user, setUser] = useState(() => {
+    // On startup: clear localStorage if the stored token is already expired
     const saved = localStorage.getItem('user');
-    return saved ? JSON.parse(saved) : null;
+    if (!saved) return null;
+    const parsed = JSON.parse(saved);
+    if (isTokenExpired(parsed?.token)) {
+      localStorage.removeItem('user');
+      return null;
+    }
+    return parsed;
   });
+
+  // Auto-logout exactly when the JWT expires (while the app is open)
+  useEffect(() => {
+    if (!user?.token) return;
+    const ms = msUntilTokenExpiry(user.token);
+    if (ms <= 0) {
+      handleLogout();
+      return;
+    }
+    const timer = setTimeout(() => {
+      handleLogout();
+    }, ms);
+    return () => clearTimeout(timer);
+  }, [user]);
 
   const handleLogout = () => {
     localStorage.removeItem('user');
