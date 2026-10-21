@@ -16,5 +16,8 @@ namespace MatchUp.Api.Models
         public string? PhoneNumber { get; set; }
         public UserRole Role { get; set; } = UserRole.Player;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        // Navigation property for the PlayerProfile
+        public PlayerProfile? PlayerProfile { get; set; }
     }
 }

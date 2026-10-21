@@ -104,6 +104,10 @@ dotnet run --launch-profile https
 
 The API is available at `https://localhost:7093`.
 
+The frontend and profile endpoints use this HTTPS URL by default. If you prefer
+HTTP during local development, run `dotnet run --launch-profile http` and set
+`VITE_API_URL=http://localhost:5056` in `frontend/.env.local`.
+
 ### Start the frontend
 
 In a second terminal:

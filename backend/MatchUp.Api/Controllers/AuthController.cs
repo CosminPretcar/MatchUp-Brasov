@@ -51,6 +51,16 @@ public class AuthController : ControllerBase
         };
 
         _context.Users.Add(user);
+
+        if (user.Role == UserRole.Player)
+        {
+            var playerProfile = new PlayerProfile
+            {
+                UserId = user.Id
+            };
+            _context.PlayerProfiles.Add(playerProfile);
+        }
+        
         await _context.SaveChangesAsync();
 
         return Ok(new AuthResponseDto
