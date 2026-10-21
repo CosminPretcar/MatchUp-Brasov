@@ -22,6 +22,48 @@ namespace MatchUp.Api.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("MatchUp.Api.Models.PlayerProfile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Bio")
+                        .HasColumnType("text");
+
+                    b.Property<double>("FairPlayScore")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("MatchesPlayed")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Position")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PreferredFoot")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PreferredZone")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("SkillLevel")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("PlayerProfiles");
+                });
+
             modelBuilder.Entity("MatchUp.Api.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -56,6 +98,22 @@ namespace MatchUp.Api.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("MatchUp.Api.Models.PlayerProfile", b =>
+                {
+                    b.HasOne("MatchUp.Api.Models.User", "User")
+                        .WithOne("PlayerProfile")
+                        .HasForeignKey("MatchUp.Api.Models.PlayerProfile", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MatchUp.Api.Models.User", b =>
+                {
+                    b.Navigation("PlayerProfile");
                 });
 #pragma warning restore 612, 618
         }

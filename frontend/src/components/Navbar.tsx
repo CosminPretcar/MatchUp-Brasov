@@ -1,12 +1,25 @@
 import { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, PlusCircle, User as UserIcon } from 'lucide-react';
 import logoNavbar from '../assets/logo_navbar.svg';
+import { ProfileModal } from './ProfileModal';
 
-const navigationLinks = [
+// Seturi de link-uri specifice fiecărui rol
+const guestLinks = [
   { href: '#gaseste-terenuri', label: 'Găsește Terenuri' },
   { href: '#meciuri-active', label: 'Caută Jucători' },
   { href: '#panou-proprietari', label: 'Pentru Proprietari' },
   { href: '#faq', label: 'FAQ' },
+];
+
+const playerLinks = [
+  { href: '#gaseste-terenuri', label: 'Găsește Terenuri' },
+  { href: '#meciuri-active', label: 'Meciuri Deschise' },
+  { href: '#faq', label: 'FAQ' },
+];
+
+const ownerLinks = [
+  { href: '#panou-proprietari', label: 'Panou Administrare' },
+  { href: '#faq', label: 'Ajutor & Suport' },
 ];
 
 interface NavbarProps {
@@ -17,6 +30,16 @@ interface NavbarProps {
 
 export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
+  // Determinăm rolul
+  const isOwner = user?.role === 1 || user?.role === 'FieldOwner';
+  const isPlayer = user && !isOwner;
+
+  // Alege setul de link-uri în funcție de rol
+  let navLinks = guestLinks;
+  if (isOwner) navLinks = ownerLinks;
+  else if (isPlayer) navLinks = playerLinks;
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.3)]">
@@ -29,9 +52,9 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
           </a>
         </div>
 
-        {/* Desktop navigation menu */}
+        {/* Meniu Navigare Dinamic pe Desktop */}
         <nav className="hidden lg:flex items-center gap-1 p-1">
-          {navigationLinks.map((link) => (
+          {navLinks.map((link) => (
             <a 
               key={link.href} 
               href={link.href} 
@@ -42,14 +65,56 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
           ))}
         </nav>
 
-        {/* Desktop authentication area */}
+        {/* Zona de Autentificare & Profil pe Desktop */}
         <div className="hidden lg:flex items-center gap-3">
           {user ? (
             <div className="flex items-center gap-3">
-              <span className="text-sm font-semibold text-slate-200">
-                Salut, <strong>{user.fullName}</strong>
-              </span>
+              
+              {/* Profil utilizator - disponibil doar pentru jucători */}
+              <div
+                className={`flex items-center gap-2.5 text-right ${isPlayer ? 'group cursor-pointer hover:opacity-90 transition-all' : ''}`}
+                onClick={isPlayer ? () => setIsProfileModalOpen(true) : undefined}
+                role={isPlayer ? 'button' : undefined}
+                tabIndex={isPlayer ? 0 : undefined}
+                onKeyDown={isPlayer ? (event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    setIsProfileModalOpen(true);
+                  }
+                } : undefined}
+                title={isPlayer ? 'Deschide profilul' : undefined}
+              >
+                <div className="flex flex-col items-end">
+                  <span className={`text-sm font-bold text-on-surface ${isPlayer ? 'group-hover:text-primary transition-colors' : ''}`}>
+                    {user.fullName}
+                  </span>
+                  <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider ${
+                    isOwner 
+                      ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' 
+                      : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                  }`}>
+                    {isOwner ? 'Proprietar Teren' : 'Jucător'}
+                  </span>
+                </div>
+
+                <div className={`w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center text-primary border border-white/10 ${isPlayer ? 'group-hover:border-primary/50 group-hover:scale-105 transition-all' : ''}`}>
+                  <UserIcon className="w-4 h-4" />
+                </div>
+              </div>
+
+              {/* Buton acțiune rapidă pentru Proprietari */}
+              {isOwner && (
+                <button
+                  type="button"
+                  className="px-3.5 py-1.5 text-xs font-extrabold text-slate-950 bg-amber-500 hover:bg-amber-400 rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer shadow-md flex items-center gap-1.5"
+                >
+                  <PlusCircle className="w-3.5 h-3.5" />
+                  Teren Nou
+                </button>
+              )}
+
+              {/* Buton Deconectare */}
               <button
+                type="button"
                 onClick={onLogout}
                 className="px-3.5 py-1.5 text-xs font-bold text-red-400 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 rounded-xl transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 cursor-pointer"
               >
@@ -76,7 +141,7 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
           )}
         </div>
 
-        {/* Mobile menu button */}
+        {/* Buton Meniu Mobil */}
         <button
           type="button"
           className="lg:hidden p-2 rounded-xl text-on-surface hover:bg-surface-container transition-all duration-300 hover:scale-110 active:scale-90 cursor-pointer"
@@ -88,11 +153,11 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
         </button>
       </div>
 
-      {/* Mobile menu dropdown */}
+      {/* Dropdown Meniu Mobil */}
       {isMenuOpen && (
         <nav className="lg:hidden border-t border-surface-container-high bg-surface px-6 py-4 shadow-xl">
           <div className="flex flex-col gap-2">
-            {navigationLinks.map((link) => (
+            {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
@@ -106,10 +171,36 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
             <div className="pt-2 border-t border-surface-container-high mt-1">
               {user ? (
                 <div className="flex items-center justify-between px-2 py-1">
-                  <span className="text-sm font-semibold text-slate-200">
-                    Salut, <strong>{user.fullName}</strong>
-                  </span>
+                  <div
+                    className={`flex items-center gap-2.5 text-left ${isPlayer ? 'cursor-pointer hover:opacity-80 transition-opacity' : ''}`}
+                    onClick={isPlayer ? () => {
+                      setIsProfileModalOpen(true);
+                      setIsMenuOpen(false);
+                    } : undefined}
+                    role={isPlayer ? 'button' : undefined}
+                    tabIndex={isPlayer ? 0 : undefined}
+                    onKeyDown={isPlayer ? (event) => {
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        setIsProfileModalOpen(true);
+                        setIsMenuOpen(false);
+                      }
+                    } : undefined}
+                  >
+                    <div className="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-primary border border-white/10">
+                      <UserIcon className="w-4 h-4" />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-bold text-on-surface">
+                        {user.fullName}
+                      </span>
+                      <span className="text-[10px] font-extrabold text-primary uppercase">
+                        {isOwner ? 'Proprietar Teren' : 'Jucător'}
+                      </span>
+                    </div>
+                  </div>
+
                   <button
+                    type="button"
                     onClick={() => {
                       if (onLogout) onLogout();
                       setIsMenuOpen(false);
@@ -134,6 +225,15 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
             </div>
           </div>
         </nav>
+      )}
+
+      {/* Modal Profil Jucător */}
+      {isPlayer && (
+        <ProfileModal
+          isOpen={isProfileModalOpen}
+          onClose={() => setIsProfileModalOpen(false)}
+          token={user.token}
+        />
       )}
     </header>
   );
