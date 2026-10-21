@@ -27,7 +27,7 @@ export function App() {
     return parsed;
   });
 
-  // Auto-logout la expirarea token-ului JWT
+  // Automatically log out when the JWT expires
   useEffect(() => {
     if (!user?.token) return;
     const ms = msUntilTokenExpiry(user.token);
@@ -51,7 +51,7 @@ export function App() {
     setIsAuthModalOpen(true);
   };
 
-  // Identificare rol utilizator (0 = Player, 1 = FieldOwner)
+  // Identify the user role (0 = Player, 1 = FieldOwner)
   const isOwner = user?.role === 1 || user?.role === 'FieldOwner';
   const isPlayer = user && !isOwner;
 
@@ -64,7 +64,7 @@ export function App() {
       />
 
       <main className="pt-20">
-        {/* 1. VIZUALIZARE PROPRIETAR DE TEREN (FieldOwner) */}
+        {/* 1. FIELD OWNER VIEW */}
         {isOwner && (
           <div className="max-w-7xl mx-auto px-6 py-10 space-y-8">
             <div className="bg-surface-container-low p-8 rounded-3xl border border-surface-container-high shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
@@ -88,7 +88,7 @@ export function App() {
               </button>
             </div>
 
-            {/* Statistici rapide Proprietar */}
+            {/* Quick owner statistics */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-surface-container p-6 rounded-2xl flex items-center justify-between border border-white/5">
                 <div>
@@ -113,12 +113,12 @@ export function App() {
               </div>
             </div>
 
-            {/* Componenta B2BCallout pentru panoul proprietarului */}
+            {/* B2BCallout component for the owner dashboard */}
             <B2BCallout />
           </div>
         )}
 
-        {/* 2. VIZUALIZARE JUCĂTOR AUTENTIFICAT (Player) */}
+        {/* 2. AUTHENTICATED PLAYER VIEW */}
         {isPlayer && (
           <>
             <Hero />
@@ -128,7 +128,7 @@ export function App() {
           </>
         )}
 
-        {/* 3. VIZUALIZARE VIZITATOR (GUEST / NEAUTENTIFICAT) */}
+        {/* 3. GUEST VIEW */}
         {!user && (
           <>
             <Hero />
@@ -145,7 +145,7 @@ export function App() {
 
       <Footer />
 
-      {/* Modal Autentificare / Înregistrare */}
+      {/* Authentication / registration modal */}
       <AuthModal
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}

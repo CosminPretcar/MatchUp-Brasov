@@ -3,7 +3,7 @@ import { Menu, X, PlusCircle, User as UserIcon } from 'lucide-react';
 import logoNavbar from '../assets/logo_navbar.svg';
 import { ProfileModal } from './ProfileModal';
 
-// Seturi de link-uri specifice fiecărui rol
+// Link sets for each user role
 const guestLinks = [
   { href: '#gaseste-terenuri', label: 'Găsește Terenuri' },
   { href: '#meciuri-active', label: 'Caută Jucători' },
@@ -32,11 +32,11 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
-  // Determinăm rolul
+  // Determine the user role
   const isOwner = user?.role === 1 || user?.role === 'FieldOwner';
   const isPlayer = user && !isOwner;
 
-  // Alege setul de link-uri în funcție de rol
+  // Select the links based on the user role
   let navLinks = guestLinks;
   if (isOwner) navLinks = ownerLinks;
   else if (isPlayer) navLinks = playerLinks;
@@ -52,7 +52,7 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
           </a>
         </div>
 
-        {/* Meniu Navigare Dinamic pe Desktop */}
+        {/* Dynamic desktop navigation */}
         <nav className="hidden lg:flex items-center gap-1 p-1">
           {navLinks.map((link) => (
             <a 
@@ -65,12 +65,12 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
           ))}
         </nav>
 
-        {/* Zona de Autentificare & Profil pe Desktop */}
+        {/* Desktop authentication and profile area */}
         <div className="hidden lg:flex items-center gap-3">
           {user ? (
             <div className="flex items-center gap-3">
               
-              {/* Profil utilizator - disponibil doar pentru jucători */}
+              {/* User profile - available only to players */}
               <div
                 className={`flex items-center gap-2.5 text-right ${isPlayer ? 'group cursor-pointer hover:opacity-90 transition-all' : ''}`}
                 onClick={isPlayer ? () => setIsProfileModalOpen(true) : undefined}
@@ -101,7 +101,7 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
                 </div>
               </div>
 
-              {/* Buton acțiune rapidă pentru Proprietari */}
+              {/* Quick action button for owners */}
               {isOwner && (
                 <button
                   type="button"
@@ -112,7 +112,7 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
                 </button>
               )}
 
-              {/* Buton Deconectare */}
+              {/* Logout button */}
               <button
                 type="button"
                 onClick={onLogout}
@@ -141,7 +141,7 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
           )}
         </div>
 
-        {/* Buton Meniu Mobil */}
+        {/* Mobile menu button */}
         <button
           type="button"
           className="lg:hidden p-2 rounded-xl text-on-surface hover:bg-surface-container transition-all duration-300 hover:scale-110 active:scale-90 cursor-pointer"
@@ -153,7 +153,7 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
         </button>
       </div>
 
-      {/* Dropdown Meniu Mobil */}
+      {/* Mobile menu dropdown */}
       {isMenuOpen && (
         <nav className="lg:hidden border-t border-surface-container-high bg-surface px-6 py-4 shadow-xl">
           <div className="flex flex-col gap-2">
@@ -227,7 +227,7 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
         </nav>
       )}
 
-      {/* Modal Profil Jucător */}
+      {/* Player profile modal */}
       {isPlayer && (
         <ProfileModal
           isOpen={isProfileModalOpen}

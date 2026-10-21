@@ -22,7 +22,7 @@ export const playerTranslations = {
   }
 };
 
-// Helper simplu pentru afișare
+// Simple display helper
 export const getLabel = (
   category: keyof typeof playerTranslations, 
   key: string, 

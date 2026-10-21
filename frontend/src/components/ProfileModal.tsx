@@ -40,7 +40,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const [initialFormData, setInitialFormData] = useState<ProfileData | null>(null);
-  const lang: Language = 'ro'; // Se poate seta dinamic pe viitor
+  const lang: Language = 'ro'; // This can be made dynamic later
 
   const [formData, setFormData] = useState<ProfileData>({
     id: '',
@@ -72,7 +72,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
     onClose();
   }, [hasUnsavedChanges, onClose]);
 
-  // Închidere la tasta ESC
+  // Close on Escape
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') handleClose();
@@ -81,7 +81,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, handleClose]);
 
-  // Încărcare profil din backend
+  // Load the profile from the backend
   useEffect(() => {
     if (!isOpen || !token) return;
 
@@ -121,7 +121,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
     fetchProfile();
   }, [isOpen, token]);
 
-  // Salvare profil în backend
+  // Save the profile to the backend
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
@@ -177,13 +177,13 @@ if (!isOpen) return null;
         className="fixed inset-0 bg-[#090C12]/80 backdrop-blur-md transition-opacity"
       />
 
-      {/* Wrapper de centrare care previne împingerea în sus peste ecran */}
+      {/* Centering wrapper that prevents the modal from being pushed above the viewport */}
       <div className="flex min-h-full items-center justify-center p-4 sm:p-6 text-center">
         
-        {/* Modal Card - Înălțime maximizată inteligent */}
+        {/* Modal card with an adaptive maximum height */}
         <div className="relative z-10 w-full max-w-[640px] max-h-[85vh] flex flex-col bg-[#161B26]/95 border border-[#263042] rounded-3xl shadow-2xl overflow-hidden backdrop-blur-xl text-left">
           
-          {/* Header FIX (mereu vizibil sus) */}
+          {/* Fixed header that remains visible */}
           <div className="relative px-6 pt-6 pb-4 sm:px-8 border-b border-[#263042]/60 flex items-center justify-between flex-shrink-0 bg-[#161B26]">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
@@ -204,7 +204,7 @@ if (!isOpen) return null;
             </button>
           </div>
 
-          {/* Corpul modalului cu scroll interior */}
+          {/* Modal body with internal scrolling */}
           <div className="px-6 py-5 sm:px-8 overflow-y-auto flex-1">
             
             {loading ? (
@@ -215,7 +215,7 @@ if (!isOpen) return null;
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
                 
-                {/* Mesaje Eroare / Succes */}
+                {/* Error and success messages */}
                 {errorMsg && (
                   <div className="p-3.5 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-xs font-semibold flex items-center gap-2">
                     <AlertCircle className="w-4 h-4 flex-shrink-0" />
@@ -229,7 +229,7 @@ if (!isOpen) return null;
                   </div>
                 )}
 
-                {/* Insigne Statistici */}
+                {/* Statistics badges */}
                 <div className="grid grid-cols-2 gap-3 p-4 bg-[#1D2433]/60 border border-white/5 rounded-2xl">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center">
@@ -252,7 +252,7 @@ if (!isOpen) return null;
                   </div>
                 </div>
 
-                {/* Date Personale */}
+                {/* Personal information */}
                 <div className="space-y-3">
                   <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-400">Date Personale</h3>
                   
@@ -291,13 +291,13 @@ if (!isOpen) return null;
                   </div>
                 </div>
 
-                {/* Atribute pe Teren */}
+                {/* On-field attributes */}
                 <div className="space-y-3">
                   <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-400">Atribute pe Teren</h3>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     
-                    {/* Poziție */}
+                    {/* Position */}
                     <div className="space-y-1.5">
                       <label className="block text-xs font-semibold text-slate-300 flex items-center gap-1">
                         <Flame className="w-3.5 h-3.5 text-emerald-400" /> Poziție Preferată
@@ -315,7 +315,7 @@ if (!isOpen) return null;
                       </select>
                     </div>
 
-                    {/* Picior Preferat */}
+                    {/* Preferred foot */}
                     <div className="space-y-1.5">
                       <label className="block text-xs font-semibold text-slate-300 flex items-center gap-1">
                         <Footprints className="w-3.5 h-3.5 text-emerald-400" /> Picior Bază
@@ -333,7 +333,7 @@ if (!isOpen) return null;
                       </select>
                     </div>
 
-                    {/* Nivel Joc */}
+                    {/* Skill level */}
                     <div className="space-y-1.5">
                       <label className="block text-xs font-semibold text-slate-300 flex items-center gap-1">
                         <Sparkles className="w-3.5 h-3.5 text-emerald-400" /> Nivel de Joc
@@ -353,7 +353,7 @@ if (!isOpen) return null;
 
                   </div>
 
-                  {/* Cartier Preferat */}
+                  {/* Preferred neighborhood */}
                   <div className="space-y-1.5">
                     <label className="block text-xs font-semibold text-slate-300 flex items-center gap-1">
                       <MapPin className="w-3.5 h-3.5 text-emerald-400" /> Cartier Favorit în Brașov
@@ -386,7 +386,7 @@ if (!isOpen) return null;
                   </div>
                 </div>
 
-                {/* Buton Salvare */}
+                {/* Save button */}
                 <div className="pt-2">
                   <button
                     type="submit"
