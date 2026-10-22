@@ -9,6 +9,7 @@ namespace MatchUp.Api.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<PlayerProfile> PlayerProfiles { get; set; }
+        public DbSet<Field> Fields { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,6 +28,12 @@ namespace MatchUp.Api.Data
                 .WithOne(p => p.User)
                 .HasForeignKey<PlayerProfile>(p => p.UserId)
                 .OnDelete(DeleteBehavior.Cascade); // Ensure that deleting a User also deletes the associated PlayerProfile
+
+            modelBuilder.Entity<Field>()
+                .HasOne(f => f.Owner)
+                .WithMany()
+                .HasForeignKey(f => f.OwnerId)
+                .OnDelete(DeleteBehavior.Cascade); // Ensure that deleting a User also deletes the associated Fields
         }
     }
 }

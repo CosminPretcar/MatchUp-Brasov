@@ -4,6 +4,7 @@ import {
   ArrowRight, Users, Building2, User, Phone, CheckCircle2, ShieldCheck 
 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { API_BASE_URL } from '../utils/api';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -65,7 +66,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
   if (!isOpen) return null;
 
   // Local backend endpoint
-  const API_BASE_URL = `${import.meta.env.VITE_API_URL || 'https://localhost:7093'}/api/auth`;
+  const AUTH_API_BASE_URL = `${API_BASE_URL}/api/auth`;
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,7 +74,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/login`, {
+      const response = await fetch(`${AUTH_API_BASE_URL}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -105,7 +106,7 @@ const handleRegister = async (e: React.FormEvent) => {
   setLoading(true);
 
   try {
-    const response = await fetch(`${API_BASE_URL}/register`, {
+    const response = await fetch(`${AUTH_API_BASE_URL}/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
