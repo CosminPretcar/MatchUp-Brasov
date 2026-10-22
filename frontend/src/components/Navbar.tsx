@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Menu, X, PlusCircle, User as UserIcon } from 'lucide-react';
+import { Menu, X, User as UserIcon } from 'lucide-react';
 import logoNavbar from '../assets/logo_navbar.svg';
 import { ProfileModal } from './ProfileModal';
 import { useLanguage } from '../context/LanguageContext';
@@ -102,17 +102,6 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
                   <UserIcon className="w-4 h-4" />
                 </div>
               </div>
-
-              {/* Quick action button for owners */}
-              {isOwner && (
-                <button
-                  type="button"
-                  className="px-3.5 py-1.5 text-xs font-extrabold text-slate-950 bg-amber-500 hover:bg-amber-400 rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer shadow-md flex items-center gap-1.5"
-                >
-                  <PlusCircle className="w-3.5 h-3.5" />
-                  {t('Teren Nou')}
-                </button>
-              )}
 
               {/* Logout button */}
               <button

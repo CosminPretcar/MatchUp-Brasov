@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { playerTranslations, getLabel, type Language } from '../utils/translations';
 import { useLanguage } from '../context/LanguageContext';
+import { API_BASE_URL } from '../utils/api';
 
 interface ProfileModalProps {
   isOpen: boolean;
@@ -35,7 +36,6 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
   token,
   onProfileUpdated 
 }) => {
-  const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://localhost:7093';
   const { language, t } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
