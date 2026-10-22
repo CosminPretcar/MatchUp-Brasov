@@ -12,8 +12,10 @@ import { Footer } from './components/Footer';
 import { AuthModal } from './components/AuthModal';
 import { isTokenExpired, msUntilTokenExpiry } from './utils/auth';
 import { Building2, Calendar, PlusCircle, TrendingUp } from 'lucide-react';
+import { useLanguage } from './context/LanguageContext';
 
 export function App() {
+  const { t } = useLanguage();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authTab, setAuthTab] = useState<'login' | 'register'>('login');
   const [user, setUser] = useState(() => {
@@ -70,13 +72,13 @@ export function App() {
             <div className="bg-surface-container-low p-8 rounded-3xl border border-surface-container-high shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
               <div>
                 <span className="px-3 py-1 rounded-full bg-amber-500/20 text-amber-400 text-xs font-bold uppercase tracking-wider border border-amber-500/30">
-                  Panou Administrare Bază Sportivă
+                  {t('Panou Administrare Bază Sportivă')}
                 </span>
                 <h1 className="text-3xl font-extrabold text-on-surface mt-2">
-                  Bine ai revenit, {user.fullName}!
+                  {t('Bine ai revenit')}, {user.fullName}!
                 </h1>
                 <p className="text-sm text-on-surface-variant mt-1">
-                  Gestionează orarul terenurilor, rezervările primite și gradul de ocupare.
+                  {t('Gestionează orarul terenurilor, rezervările primite și gradul de ocupare.')}
                 </p>
               </div>
               <button 
@@ -84,7 +86,7 @@ export function App() {
                 className="px-6 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-sm flex items-center gap-2 shadow-lg transition-all hover:scale-105 active:scale-95 cursor-pointer"
               >
                 <PlusCircle className="w-5 h-5" />
-                Adaugă Teren Nou
+                {t('Adaugă Teren Nou')}
               </button>
             </div>
 
@@ -92,21 +94,21 @@ export function App() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-surface-container p-6 rounded-2xl flex items-center justify-between border border-white/5">
                 <div>
-                  <p className="text-xs text-on-surface-variant">Terenuri Active</p>
-                  <p className="text-2xl font-bold text-on-surface mt-1">2 Terenuri</p>
+                  <p className="text-xs text-on-surface-variant">{t('Terenuri Active')}</p>
+                  <p className="text-2xl font-bold text-on-surface mt-1">2 {t('Terenuri')}</p>
                 </div>
                 <Building2 className="w-8 h-8 text-primary" />
               </div>
               <div className="bg-surface-container p-6 rounded-2xl flex items-center justify-between border border-white/5">
                 <div>
-                  <p className="text-xs text-on-surface-variant">Rezervări Săptămâna Aceasta</p>
-                  <p className="text-2xl font-bold text-on-surface mt-1">18 Sloturi</p>
+                  <p className="text-xs text-on-surface-variant">{t('Rezervări Săptămâna Aceasta')}</p>
+                  <p className="text-2xl font-bold text-on-surface mt-1">18 {t('Sloturi')}</p>
                 </div>
                 <Calendar className="w-8 h-8 text-secondary" />
               </div>
               <div className="bg-surface-container p-6 rounded-2xl flex items-center justify-between border border-white/5">
                 <div>
-                  <p className="text-xs text-on-surface-variant">Încasări Estimate</p>
+                  <p className="text-xs text-on-surface-variant">{t('Încasări Estimate')}</p>
                   <p className="text-2xl font-bold text-primary mt-1">2.400 RON</p>
                 </div>
                 <TrendingUp className="w-8 h-8 text-primary" />

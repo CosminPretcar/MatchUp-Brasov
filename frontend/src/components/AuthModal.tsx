@@ -3,6 +3,7 @@ import {
   X, Zap, LogIn, UserPlus, Mail, Lock, Eye, EyeOff, 
   ArrowRight, Users, Building2, User, Phone, CheckCircle2, ShieldCheck 
 } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -21,6 +22,7 @@ interface AuthenticatedUser {
 }
 
 export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess, defaultTab = 'login' }) => {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<'login' | 'register'>(defaultTab);
   const [showPassword, setShowPassword] = useState(false);
   const [selectedRole, setSelectedRole] = useState<'Player' | 'FieldOwner'>('Player');
@@ -83,7 +85,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
       const data = await response.json().catch(() => null);
 
       if (!response.ok) {
-        throw new Error(data?.message || 'Autentificare eșuată.');
+        throw new Error(t(data?.message || 'Autentificare eșuată.'));
       }
 
       // Store the authenticated user in localStorage
@@ -91,7 +93,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
       if (onSuccess) onSuccess(data);
       onClose();
     } catch (err: any) {
-      setErrorMsg(err.message || 'A apărut o eroare la conectare.');
+      setErrorMsg(err.message || t('A apărut o eroare la conectare.'));
     } finally {
       setLoading(false);
     }
@@ -121,16 +123,16 @@ const handleRegister = async (e: React.FormEvent) => {
       // Handle validation errors returned by the backend
       if (data?.errors) {
         const firstError = Object.values(data.errors)[0] as string[];
-        throw new Error(firstError[0] || 'Datele introduse sunt invalide.');
+        throw new Error(t(firstError[0] || 'Datele introduse sunt invalide.'));
       }
-      throw new Error(data?.message || 'Înregistrare eșuată.');
+      throw new Error(t(data?.message || 'Înregistrare eșuată.'));
     }
 
     localStorage.setItem('user', JSON.stringify(data));
     if (onSuccess) onSuccess(data);
     onClose();
   } catch (err: any) {
-    setErrorMsg(err.message || 'A apărut o eroare la înregistrare.');
+    setErrorMsg(err.message || t('A apărut o eroare la înregistrare.'));
   } finally {
     setLoading(false);
   }
@@ -170,18 +172,18 @@ const handleRegister = async (e: React.FormEvent) => {
                 <span className="text-xl font-black tracking-tight text-white">Match<span className="text-emerald-400">Up</span></span>
                 <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-lime-400 tracking-wider">BRAȘOV</span>
               </div>
-              <p className="text-xs text-slate-400 font-medium">Terenuri sintetice • Matchmaking rapid</p>
+              <p className="text-xs text-slate-400 font-medium">{t('Terenuri sintetice • Matchmaking rapid')}</p>
             </div>
           </div>
 
           <div className="mt-4">
             <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
-              {activeTab === 'login' ? 'Bine ai revenit pe teren!' : 'Alătură-te comunității!'}
+              {t(activeTab === 'login' ? 'Bine ai revenit!' : 'Alătură-te comunității!')}
             </h2>
             <p className="text-xs sm:text-sm text-slate-400 mt-1">
               {activeTab === 'login' 
-                ? 'Conectează-te pentru a rezerva terenuri și a te alătura meciurilor din oraș.' 
-                : 'Creează un cont gratuit în mai puțin de un minut pentru meciuri rapide.'}
+                ? t('Conectează-te pentru a accesa platforma și funcțiile contului tău.')
+                : t('Creează un cont gratuit în mai puțin de un minut și începe să folosești platforma.')}
             </p>
           </div>
 
@@ -197,7 +199,7 @@ const handleRegister = async (e: React.FormEvent) => {
               }`}
             >
               <LogIn className="w-4 h-4" />
-              <span>Autentificare</span>
+              <span>{t('Autentificare')}</span>
             </button>
 
             <button
@@ -210,7 +212,7 @@ const handleRegister = async (e: React.FormEvent) => {
               }`}
             >
               <UserPlus className="w-4 h-4" />
-              <span>Înregistrare</span>
+              <span>{t('Înregistrare')}</span>
             </button>
           </div>
         </div>
@@ -229,7 +231,7 @@ const handleRegister = async (e: React.FormEvent) => {
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-1.5">
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
-                  Adresă de Email
+                  {t('Adresă de Email')}
                 </label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -248,7 +250,7 @@ const handleRegister = async (e: React.FormEvent) => {
 
               <div className="space-y-1.5">
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
-                  Parolă
+                  {t('Parolă')}
                 </label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -277,7 +279,7 @@ const handleRegister = async (e: React.FormEvent) => {
                 disabled={loading}
                 className="w-full mt-2 py-3.5 px-6 rounded-xl font-extrabold text-sm text-slate-950 bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600 hover:from-lime-400 hover:to-emerald-400 transition-all flex items-center justify-center gap-2 group disabled:opacity-50"
               >
-                <span>{loading ? 'Se conectează...' : 'Intră în cont'}</span>
+                <span>{loading ? t('Se conectează...') : t('Intră în cont')}</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </form>
@@ -286,7 +288,7 @@ const handleRegister = async (e: React.FormEvent) => {
               {/* Role Selection */}
               <div className="space-y-2">
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
-                  Alege Tipul de Cont *
+                  {t('Alege Tipul de Cont *')}
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div
@@ -303,8 +305,8 @@ const handleRegister = async (e: React.FormEvent) => {
                       </div>
                       <div className={`w-4 h-4 rounded-full border-2 ${selectedRole === 'Player' ? 'border-emerald-400 bg-emerald-500' : 'border-slate-600'}`} />
                     </div>
-                    <div className="font-bold text-sm text-white">Jucător</div>
-                    <p className="text-xs text-slate-400 mt-1">Rezervă terenuri și găsește meciuri.</p>
+                    <div className="font-bold text-sm text-white">{t('Jucător')}</div>
+                    <p className="text-xs text-slate-400 mt-1">{t('Rezervă terenuri și găsește meciuri.')}</p>
                   </div>
 
                   <div
@@ -321,8 +323,8 @@ const handleRegister = async (e: React.FormEvent) => {
                       </div>
                       <div className={`w-4 h-4 rounded-full border-2 ${selectedRole === 'FieldOwner' ? 'border-emerald-400 bg-emerald-500' : 'border-slate-600'}`} />
                     </div>
-                    <div className="font-bold text-sm text-slate-200">Proprietar Teren</div>
-                    <p className="text-xs text-slate-400 mt-1">Administrează baza sportivă.</p>
+                    <div className="font-bold text-sm text-slate-200">{t('Proprietar Teren')}</div>
+                    <p className="text-xs text-slate-400 mt-1">{t('Administrează baza sportivă.')}</p>
                   </div>
                 </div>
               </div>
@@ -330,7 +332,7 @@ const handleRegister = async (e: React.FormEvent) => {
               {/* Full name */}
               <div className="space-y-1.5">
                 <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">
-                  Nume și Prenume
+                  {t('Nume și Prenume')}
                 </label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -350,7 +352,7 @@ const handleRegister = async (e: React.FormEvent) => {
               {/* Email & Phone */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="space-y-1.5">
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">Email</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">{t('Email')}</label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                       <Mail className="w-4 h-4" />
@@ -367,7 +369,7 @@ const handleRegister = async (e: React.FormEvent) => {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">Telefon</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">{t('Telefon')}</label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                       <Phone className="w-4 h-4" />
@@ -385,7 +387,7 @@ const handleRegister = async (e: React.FormEvent) => {
 
               {/* Password */}
               <div className="space-y-1.5">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">Parolă</label>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300">{t('Parolă')}</label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                     <Lock className="w-4 h-4" />
@@ -395,7 +397,7 @@ const handleRegister = async (e: React.FormEvent) => {
                     required
                     value={regPassword}
                     onChange={(e) => setRegPassword(e.target.value)}
-                    placeholder="Minim 6 caractere"
+                    placeholder={t('Minim 6 caractere')}
                     className="w-full pl-10 pr-10 py-3 bg-[#1D2433]/70 border border-[#263042] rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
                   />
                   <button
@@ -413,7 +415,7 @@ const handleRegister = async (e: React.FormEvent) => {
                 disabled={loading}
                 className="w-full mt-3 py-3.5 px-6 rounded-xl font-extrabold text-sm text-slate-950 bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600 hover:from-lime-400 hover:to-emerald-400 transition-all flex items-center justify-center gap-2 group disabled:opacity-50"
               >
-                <span>{loading ? 'Se creează contul...' : `Creează Cont ${selectedRole === 'Player' ? 'Jucător' : 'Proprietar'}`}</span>
+                <span>{loading ? t('Se creează contul...') : t(selectedRole === 'Player' ? 'Creează Cont Jucător' : 'Creează Cont Proprietar')}</span>
                 <CheckCircle2 className="w-4 h-4" />
               </button>
             </form>
@@ -424,7 +426,7 @@ const handleRegister = async (e: React.FormEvent) => {
         <div className="px-6 py-3.5 bg-[#1D2433]/40 border-t border-[#263042]/50 flex items-center justify-between text-[11px] text-slate-400">
           <div className="flex items-center gap-1.5">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Date protejate prin criptare SSL</span>
+            <span>{t('Date protejate prin criptare SSL')}</span>
           </div>
           <span>MatchUp Brașov</span>
         </div>

@@ -5,6 +5,7 @@ import {
   Save, CheckCircle2, AlertCircle, Sparkles, Footprints, Flame 
 } from 'lucide-react';
 import { playerTranslations, getLabel, type Language } from '../utils/translations';
+import { useLanguage } from '../context/LanguageContext';
 
 interface ProfileModalProps {
   isOpen: boolean;
@@ -35,12 +36,13 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
   onProfileUpdated 
 }) => {
   const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://localhost:7093';
+  const { language, t } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const [initialFormData, setInitialFormData] = useState<ProfileData | null>(null);
-  const lang: Language = 'ro'; // This can be made dynamic later
+  const lang: Language = language;
 
   const [formData, setFormData] = useState<ProfileData>({
     id: '',
@@ -66,7 +68,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
   );
 
   const handleClose = useCallback(() => {
-    if (hasUnsavedChanges && !window.confirm('Ai modificări nesalvate. Sigur vrei să închizi profilul?')) {
+    if (hasUnsavedChanges && !window.confirm(t('Ai modificări nesalvate. Sigur vrei să închizi profilul?'))) {
       return;
     }
     onClose();
@@ -97,7 +99,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
         });
 
         if (!response.ok) {
-          throw new Error('Nu s-a putut încărca profilul.');
+          throw new Error(t('Nu s-a putut încărca profilul.'));
         }
 
         const data: ProfileData = await response.json();
@@ -112,7 +114,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
           bio: data.bio || ''
         });
       } catch (err: any) {
-        setErrorMsg(err.message || 'Profilul nu a putut fi încărcat. Încearcă din nou.');
+        setErrorMsg(err.message || t('Profilul nu a putut fi încărcat. Încearcă din nou.'));
       } finally {
         setLoading(false);
       }
@@ -148,20 +150,20 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
       if (!response.ok) {
         const errData = await response.json().catch(() => null);
         if (response.status === 403) {
-          throw new Error('Nu ai permisiunea de a modifica un profil de jucător.');
+          throw new Error(t('Nu ai permisiunea de a modifica un profil de jucător.'));
         }
         const validationMessage = errData?.errors
           ? Object.values(errData.errors).flat().join(' ')
           : null;
-        throw new Error(validationMessage || errData?.message || 'Profilul nu a putut fi salvat. Verifică datele introduse.');
+        throw new Error(t(validationMessage || errData?.message || 'Profilul nu a putut fi salvat. Verifică datele introduse.'));
       }
 
       setInitialFormData(formData);
-      setSuccessMsg('Profilul a fost actualizat cu succes!');
+      setSuccessMsg(t('Profilul a fost actualizat cu succes!'));
       if (onProfileUpdated) onProfileUpdated();
       setTimeout(() => setSuccessMsg(''), 3000);
     } catch (err: any) {
-      setErrorMsg(err.message || 'A apărut o eroare.');
+      setErrorMsg(err.message || t('A apărut o eroare.'));
     } finally {
       setSaving(false);
     }
@@ -190,8 +192,8 @@ if (!isOpen) return null;
                 <User className="w-5 h-5" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-white tracking-tight">Profil Jucător</h2>
-                <p className="text-xs text-slate-400">Personalizează-ți fișa de meci și atributele</p>
+                <h2 className="text-xl font-bold text-white tracking-tight">{t('Profil Jucător')}</h2>
+                <p className="text-xs text-slate-400">{t('Personalizează-ți fișa de meci și atributele')}</p>
               </div>
             </div>
 
@@ -210,7 +212,7 @@ if (!isOpen) return null;
             {loading ? (
               <div className="py-12 flex flex-col items-center justify-center gap-3 text-slate-400">
                 <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
-                <span className="text-xs font-semibold">Se încarcă profilul...</span>
+                <span className="text-xs font-semibold">{t('Se încarcă profilul...')}</span>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -236,7 +238,7 @@ if (!isOpen) return null;
                       <Shield className="w-5 h-5" />
                     </div>
                     <div>
-                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Fair-Play Score</span>
+                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">{t('Fair-Play Score')}</span>
                       <span className="text-lg font-black text-amber-400">{formData.fairPlayScore.toFixed(1)} / 5.0</span>
                     </div>
                   </div>
@@ -246,20 +248,20 @@ if (!isOpen) return null;
                       <Trophy className="w-5 h-5" />
                     </div>
                     <div>
-                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Meciuri Jucate</span>
-                      <span className="text-lg font-black text-emerald-400">{formData.matchesPlayed} Meciuri</span>
+                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">{t('Meciuri Jucate')}</span>
+                      <span className="text-lg font-black text-emerald-400">{formData.matchesPlayed} {t('Meciuri')}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Personal information */}
                 <div className="space-y-3">
-                  <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-400">Date Personale</h3>
+                  <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-400">{t('Date Personale')}</h3>
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="space-y-1.5">
                       <label className="block text-xs font-semibold text-slate-300">
-                        Nume Complet <span className="text-[10px] text-slate-500">(nu poate fi modificat)</span>
+                        {t('Nume Complet')} <span className="text-[10px] text-slate-500">({t('nu poate fi modificat')})</span>
                       </label>
                       <div className="relative">
                         <User className="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400 pointer-events-none" />
@@ -274,7 +276,7 @@ if (!isOpen) return null;
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="block text-xs font-semibold text-slate-300">Telefon (pentru WhatsApp)</label>
+                      <label className="block text-xs font-semibold text-slate-300">{t('Telefon (pentru WhatsApp)')}</label>
                       <div className="relative">
                         <Phone className="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400 pointer-events-none" />
                         <input 
@@ -293,14 +295,14 @@ if (!isOpen) return null;
 
                 {/* On-field attributes */}
                 <div className="space-y-3">
-                  <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-400">Atribute pe Teren</h3>
+                  <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-400">{t('Atribute pe Teren')}</h3>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     
                     {/* Position */}
                     <div className="space-y-1.5">
                       <label className="block text-xs font-semibold text-slate-300 flex items-center gap-1">
-                        <Flame className="w-3.5 h-3.5 text-emerald-400" /> Poziție Preferată
+                        <Flame className="w-3.5 h-3.5 text-emerald-400" /> {t('Poziție Preferată')}
                       </label>
                       <select
                         value={formData.position}
@@ -318,7 +320,7 @@ if (!isOpen) return null;
                     {/* Preferred foot */}
                     <div className="space-y-1.5">
                       <label className="block text-xs font-semibold text-slate-300 flex items-center gap-1">
-                        <Footprints className="w-3.5 h-3.5 text-emerald-400" /> Picior Bază
+                        <Footprints className="w-3.5 h-3.5 text-emerald-400" /> {t('Picior Bază')}
                       </label>
                       <select
                         value={formData.preferredFoot}
@@ -336,7 +338,7 @@ if (!isOpen) return null;
                     {/* Skill level */}
                     <div className="space-y-1.5">
                       <label className="block text-xs font-semibold text-slate-300 flex items-center gap-1">
-                        <Sparkles className="w-3.5 h-3.5 text-emerald-400" /> Nivel de Joc
+                        <Sparkles className="w-3.5 h-3.5 text-emerald-400" /> {t('Nivel de Joc')}
                       </label>
                       <select
                         value={formData.skillLevel}
@@ -356,14 +358,14 @@ if (!isOpen) return null;
                   {/* Preferred neighborhood */}
                   <div className="space-y-1.5">
                     <label className="block text-xs font-semibold text-slate-300 flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5 text-emerald-400" /> Cartier Favorit în Brașov
+                      <MapPin className="w-3.5 h-3.5 text-emerald-400" /> {t('Cartier Favorit în Brașov')}
                     </label>
                     <select
                       value={formData.preferredZone}
                       onChange={(e) => setFormData({ ...formData, preferredZone: e.target.value })}
                       className="w-full py-2.5 px-3 bg-[#1D2433]/80 border border-[#263042] rounded-xl text-xs text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 cursor-pointer"
                     >
-                      <option value="all" className="bg-[#161B26]">Toate cartierele din Brașov</option>
+                      <option value="all" className="bg-[#161B26]">{t('Toate cartierele din Brașov')}</option>
                       <option value="tractorul" className="bg-[#161B26]">Tractorul (Coresi & Rulmentul)</option>
                       <option value="astra" className="bg-[#161B26]">Astra / Saturn</option>
                       <option value="bartolomeu" className="bg-[#161B26]">Bartolomeu & Stadionului</option>
@@ -374,13 +376,13 @@ if (!isOpen) return null;
 
                   {/* Bio */}
                   <div className="space-y-1.5">
-                    <label className="block text-xs font-semibold text-slate-300">Scurtă Descriere / Bio</label>
+                    <label className="block text-xs font-semibold text-slate-300">{t('Scurtă Descriere / Bio')}</label>
                     <textarea
                       rows={2}
                       value={formData.bio}
                       onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                       maxLength={500}
-                      placeholder="ex: Joc din plăcere în timpul săptămânii după ora 19:00. Disponibil și ca rezervă de urgență."
+                      placeholder={t('ex: Joc din plăcere în timpul săptămânii după ora 19:00. Disponibil și ca rezervă de urgență.')}
                       className="w-full px-3 py-2 bg-[#1D2433]/80 border border-[#263042] rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 resize-none"
                     />
                   </div>
@@ -394,7 +396,7 @@ if (!isOpen) return null;
                     className="w-full py-3 px-6 rounded-xl font-extrabold text-sm text-slate-950 bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600 hover:from-lime-400 hover:to-emerald-400 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 shadow-lg"
                   >
                     <Save className="w-4 h-4" />
-                    <span>{saving ? 'Se salvează...' : hasUnsavedChanges ? 'Salvează Profilul' : 'Profil salvat'}</span>
+                    <span>{saving ? t('Se salvează...') : hasUnsavedChanges ? t('Salvează Profilul') : t('Profil salvat')}</span>
                   </button>
                 </div>
 
