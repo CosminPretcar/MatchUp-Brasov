@@ -1,0 +1,251 @@
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+
+export type Language = 'ro' | 'en';
+
+type TranslationKey = string;
+
+const translations: Record<Language, Record<TranslationKey, string>> = {
+  ro: {},
+  en: {
+    'Găsește Terenuri': 'Find Fields',
+    'Caută Jucători': 'Find Players',
+    'Pentru Proprietari': 'For Field Owners',
+    'Meciuri Deschise': 'Open Matches',
+    'Panou Administrare': 'Management Dashboard',
+    'Panou Administrare Bază Sportivă': 'Sports Facility Management Dashboard',
+    'Bine ai revenit': 'Welcome back',
+    'Gestionează orarul terenurilor, rezervările primite și gradul de ocupare.': 'Manage field schedules, received bookings, and occupancy.',
+    'Adaugă Teren Nou': 'Add New Field',
+    'Terenuri Active': 'Active Fields',
+    'Terenuri': 'Fields',
+    'Rezervări Săptămâna Aceasta': 'Bookings This Week',
+    'Sloturi': 'Slots',
+    'Încasări Estimate': 'Estimated Revenue',
+    '+18% vs luna trecută': '+18% vs last month',
+    'Luni - Vineri (18:00 - 23:00)': 'Monday - Friday (18:00 - 23:00)',
+    '100% Ocupat': '100% Occupied',
+    'Weekend Nocturnă': 'Night Weekend',
+    '92% Ocupat': '92% Occupied',
+    'Ore de Zi (12:00 - 17:00)': 'Daytime Hours (12:00 - 17:00)',
+    'Sloturi Reduse': 'Limited Slots',
+    'Ajutor & Suport': 'Help & Support',
+    'Teren Nou': 'New Field',
+    'Deconectare': 'Log out',
+    'Autentificare': 'Log in',
+    'Creează Cont': 'Create Account',
+    'Jucător': 'Player',
+    'Proprietar Teren': 'Field Owner',
+    'Închide meniul': 'Close menu',
+    'Deschide meniul': 'Open menu',
+    'Deschide profilul': 'Open profile',
+    'Profil Jucător': 'Player Profile',
+    'Salvează Profilul': 'Save Profile',
+    'Profil salvat': 'Profile saved',
+    'Se salvează...': 'Saving...',
+    'Înregistrare': 'Register',
+    'Bine ai revenit pe teren!': 'Welcome back to the pitch!',
+    'Bine ai revenit!': 'Welcome back!',
+    'Alătură-te comunității!': 'Join the community!',
+    'Adresă de Email': 'Email address',
+    'Parolă': 'Password',
+    'Telefon': 'Phone',
+    'Minim 6 caractere': 'At least 6 characters',
+    'Se creează contul...': 'Creating account...',
+    'Creează Cont Jucător': 'Create Player Account',
+    'Creează Cont Proprietar': 'Create Owner Account',
+    'Date protejate prin criptare SSL': 'Data protected with SSL encryption',
+    'Elimină orele moarte de la prânz și din weekend. Fără apeluri la ore târzii și fără bătăi de cap cu avansurile. Ai o gestiune impecabilă a terenului într-un panou modern.': 'Eliminate empty afternoon and weekend hours. No late calls or deposit headaches. Manage your field flawlessly from a modern dashboard.',
+    '3.000+ Jucători': '3,000+ Players',
+    'Acces direct la audiență': 'Direct audience access',
+    'Încasări intermediate săptămâna aceasta': 'Revenue processed this week',
+    'Cum funcționează dacă sunt singur și nu am echipă în Brașov?': 'How does it work if I am alone and do not have a team in Brașov?',
+    'Intri la secțiunea „Meciuri Deschise”, alegi terenul și ora convenabilă și apeși „Mă alătur”. Îți alegi poziția, plătești cota ta și ești adăugat automat în lot cu confirmare pe WhatsApp.': 'Go to the “Open Matches” section, choose a field and a convenient time, then click “Join”. Choose your position, pay your share, and you will be added to the squad with WhatsApp confirmation.',
+    'Ce se întâmplă dacă un jucător confirmat nu mai apare la meci?': 'What happens if a confirmed player does not show up for the match?',
+    'Fiecare jucător are un scor de Fair-Play. Dacă cineva renunță fără să anunțe cu cel puțin 3 ore înainte, cota este reținută, iar sistemul activează automat o alertă de înlocuire în zonă.': 'Every player has a Fair Play score. If someone cancels without giving at least 3 hours’ notice, their share is retained and the system automatically activates a replacement alert in the area.',
+    'Cum se face plata pentru închirierea unui teren întreg?': 'How do I pay for renting an entire field?',
+    'Poți achita avansul online sau poți folosi opțiunea „Împarte plata” generând un link rapid trimis prietenilor pe WhatsApp.': 'You can pay the deposit online or use the “Split payment” option to generate a quick link to send to your friends on WhatsApp.',
+    'Se conectează...': 'Logging in...',
+    'Intră în cont': 'Log in',
+    'Alege Tipul de Cont *': 'Choose Account Type *',
+    'Nume și Prenume': 'Full name',
+    'Feed Live Brașov': 'Brașov Live Feed',
+    'Meciuri Deschise Chiar Acum': 'Open Matches Right Now',
+    'Alătură-te ca jucător individual sau cu încă un prieten în partidele de diseară.': 'Join as an individual player or with a friend in tonight’s matches.',
+    'Toate': 'All',
+    'Azi': 'Today',
+    'Mâine': 'Tomorrow',
+    'Weekend': 'Weekend',
+    'Se caută 3 jucători': 'Looking for 3 players',
+    'Urgență: 1 Portar': 'Urgent: 1 goalkeeper',
+    'Parteneriate Baze Sportive Brașov': 'Brașov Sports Facility Partnerships',
+    'Deții sau administrezi un teren sintetic în Brașov?': 'Do you own or manage a synthetic field in Brașov?',
+    'Calendar Auto': 'Automatic Calendar',
+    'Sincronizat live': 'Live synchronized',
+    'Avans Garantat': 'Guaranteed deposit',
+    'Direct pe card': 'Direct to card',
+    'Înregistrează Baza Sportivă': 'Register Sports Facility',
+    'Programează un Demo Gratuit': 'Schedule a Free Demo',
+    'Ocupare Săptămânală': 'Weekly Occupancy',
+    'Rezervă terenuri și găsește meciuri.': 'Book fields and find matches.',
+    'Administrează baza sportivă.': 'Manage your sports facility.',
+    'Terenuri sintetice • Matchmaking rapid': 'Synthetic fields • Fast matchmaking',
+    'Conectează-te pentru a rezerva terenuri și a te alătura meciurilor din oraș.': 'Log in to book fields and join matches in the city.',
+    'Creează un cont gratuit în mai puțin de un minut pentru meciuri rapide.': 'Create a free account in under a minute for fast matches.',
+    'Conectează-te pentru a accesa platforma și funcțiile contului tău.': 'Log in to access the platform and your account features.',
+    'Creează un cont gratuit în mai puțin de un minut și începe să folosești platforma.': 'Create a free account in under a minute and start using the platform.',
+    'Zona / Cartier Brașov': 'Area / Neighborhood',
+    'Toate cartierele': 'All neighborhoods',
+    'Tractorul (Rulmentul & Coresi)': 'Tractorul (Rulmentul & Coresi)',
+    'Astra / Saturn': 'Astra / Saturn',
+    'Bartolomeu & Stadionului': 'Bartolomeu & Stadionului',
+    'Noua & Dârste': 'Noua & Dârste',
+    'Data Meciului': 'Match Date',
+    'Azi, 24 Mai': 'Today, May 24',
+    'Mâine, 25 Mai': 'Tomorrow, May 25',
+    'Sâmbătă (Weekend)': 'Saturday (Weekend)',
+    'Interval Orar': 'Time Slot',
+    '20:00 - 22:00 (Nocturnă Prime)': '20:00 - 22:00 (Prime Night)',
+    '18:00 - 20:00 (După job)': '18:00 - 20:00 (After work)',
+    '22:00 - 24:00 (Late kick)': '22:00 - 24:00 (Late kick)',
+    'Teren Sintetic Tractorul': 'Tractorul Synthetic Field',
+    'Azi, 20:00 - 21:30 (90 min)': 'Today, 20:00 - 21:30 (90 min)',
+    '6 vs 6 Sintetic': '6 vs 6 Synthetic',
+    'Mediu / Tehnic': 'Intermediate / Technical',
+    'Ocupare lot: 9/12 confirmați': 'Squad occupancy: 9/12 confirmed',
+    '3 sloturi libere': '3 spots available',
+    'Baza Sportivă Bartolomeu': 'Bartolomeu Sports Facility',
+    'Azi, 21:30 - 22:30 (60 min)': 'Today, 21:30 - 22:30 (60 min)',
+    '5 vs 5 Clasic': '5 vs 5 Classic',
+    'Amator / Relaxat': 'Amateur / Relaxed',
+    'Ocupare lot: 9/10 confirmați': 'Squad occupancy: 9/10 confirmed',
+    'Portar lipsă!': 'Goalkeeper needed!',
+    'Intru ca Portar': 'Join as Goalkeeper',
+    'Mâine seară • 2 locuri libere': 'Tomorrow evening • 2 spots available',
+    'Mâine, 19:30 - 21:00 (90 min)': 'Tomorrow, 19:30 - 21:00 (90 min)',
+    '6 vs 6 Competițional': '6 vs 6 Competitive',
+    'Ocupare lot: 10/12 confirmați': 'Squad occupancy: 10/12 confirmed',
+    '2 sloturi libere': '2 spots available',
+    'Rezervă locul': 'Reserve spot',
+    'Mă alătur meciului': 'Join match',
+    'Competitiv / Rapid': 'Competitive / Fast',
+    'Română': 'Romanian',
+    'Engleză': 'English',
+    'De ce MatchUp Brașov': 'Why MatchUp Brașov',
+    'Tot ce ai nevoie pentru fotbalul de marți seara și de weekend': 'Everything you need for Tuesday night and weekend football',
+    'Adio grupuri haotice de WhatsApp cu zeci de mesaje fără sens. Găsești teren liber sau oameni potriviți în doar câteva atingeri.': 'Say goodbye to chaotic WhatsApp groups. Find an available field or the right players in just a few taps.',
+    'Disponibilitate Live': 'Live Availability',
+    'Rezervări Online Rapid': 'Fast Online Bookings',
+    'Vezi orele libere în timp real pe terenurile din Tractorul, Bartolomeu sau Noua. Confirmi și plătești direct online, fără telefoane date pe nocturnă.': 'See available times in real time at fields in Tractorul, Bartolomeu, or Noua. Confirm and pay online without late-night calls.',
+    'Explorează terenurile disponibile': 'Explore available fields',
+    'Fără meciuri anulate': 'No cancelled matches',
+    'Sistem Inteligent de Matchmaking': 'Smart Matchmaking System',
+    'A picat un fundaș sau nu aveți portar cu 2 ore înainte de fluier? Deschizi meciul în platformă și jucătorii din zonă primesc alertă instant.': 'Did a defender drop out or are you missing a goalkeeper two hours before kick-off? Open the match on the platform and nearby players get an instant alert.',
+    'Vezi cum găsești coechipieri': 'See how to find teammates',
+    'Grad Ocupare 95%': '95% Occupancy',
+    'Panou pentru Administratori': 'Management Dashboard',
+    'Dacă deții o bază sportivă în Brașov, elimini orele goale din orar, automatizezi avansurile și transmiți confirmări instant jucătorilor.': 'If you own a sports facility in Brașov, eliminate empty hours, automate deposits, and send instant confirmations to players.',
+    'Funcții pentru baze sportive': 'Sports facility features',
+    'Simplu, Clar & Fără Bătăi de Cap': 'Simple, clear & hassle-free',
+    'De la idee la fluierul de start în 3 pași': 'From idea to kick-off in 3 steps',
+    'Alege terenul sau meciul': 'Choose a field or match',
+    'Explorează terenurile sintetice din Brașov după dotări sau filtrează direct partidele amatoare care caută oameni.': 'Explore Brașov synthetic fields by amenities or filter directly for amateur matches looking for players.',
+    'Confirmă slotul sau înscrie-te': 'Confirm the slot or join',
+    'Blochează ora dorită pentru echipa ta sau alătură-te cu un simplu click unui meci deschis. Plata cotei tale se face securizat în aplicație.': 'Book the time you want for your team or join an open match with one click. Pay your share securely in the app.',
+    'Hai la fotbal!': 'Let’s play football!',
+    'Primești confirmarea instant pe WhatsApp cu instrucțiunile de acces, pinul de la vestiar și componența lotului. Vii direct încălzit.': 'Get instant WhatsApp confirmation with access instructions, the changing-room pin, and the squad list. Show up ready to play.',
+    'Întrebări Frecvente': 'Frequently Asked Questions',
+    'Tot ce vrei să știi înainte de meci': 'Everything you need to know before the match',
+    'Ai meci diseară sau stai acasă pe canapea?': 'Do you have a match tonight or are you staying on the couch?',
+    'Alătură-te celor peste 2.800 de fotbaliști amatori din Brașov care nu mai depind de scuze.': 'Join over 2,800 amateur footballers in Brașov who no longer depend on excuses.',
+    'Găsește Meciul Tău Acum': 'Find Your Match Now',
+    'Făcut cu pasiune pentru fotbalul amator din Brașov.': 'Made with passion for amateur football in Brașov.',
+    'Toate drepturile rezervate.': 'All rights reserved.',
+    'Personalizează-ți fișa de meci și atributele': 'Customize your match profile and attributes',
+    'Se încarcă profilul...': 'Loading profile...',
+    'Meciuri Jucate': 'Matches Played',
+    'Meciuri': 'Matches',
+    'Date Personale': 'Personal Information',
+    'Nume Complet': 'Full Name',
+    'nu poate fi modificat': 'cannot be changed',
+    'Telefon (pentru WhatsApp)': 'Phone (for WhatsApp)',
+    'Atribute pe Teren': 'On-field Attributes',
+    'Poziție Preferată': 'Preferred Position',
+    'Picior Bază': 'Preferred Foot',
+    'Nivel de Joc': 'Skill Level',
+    'Profilul a fost actualizat cu succes!': 'Profile updated successfully!',
+    'Ai modificări nesalvate. Sigur vrei să închizi profilul?': 'You have unsaved changes. Are you sure you want to close your profile?',
+    'Nu s-a putut încărca profilul.': 'The profile could not be loaded.',
+    'Profilul nu a putut fi încărcat. Încearcă din nou.': 'The profile could not be loaded. Please try again.',
+    'Nu ai permisiunea de a modifica un profil de jucător.': 'You are not allowed to modify a player profile.',
+    'Profilul nu a putut fi salvat. Verifică datele introduse.': 'The profile could not be saved. Check the entered details.',
+    'A apărut o eroare.': 'An error occurred.',
+    'Autentificare eșuată.': 'Login failed.',
+    'A apărut o eroare la conectare.': 'An error occurred while logging in.',
+    'Datele introduse sunt invalide.': 'The entered data is invalid.',
+    'Înregistrare eșuată.': 'Registration failed.',
+    'A apărut o eroare la înregistrare.': 'An error occurred while registering.',
+    '18 Terenuri Verificate': '18 Verified Fields',
+    'Rezervă terenul sintetic și ': 'Book a synthetic field and ',
+    'strânge echipa': 'build your team',
+    ' în câteva secunde.': ' in seconds.',
+    'Singura platformă din Brașov unde verifici sloturi live pe nocturnă și completezi lotul când îți lipsesc 2-3 băieți pentru meci.': 'The only platform in Brașov where you can check live night slots and complete your squad when you are short of players.',
+    'Caută un Meci Deschis': 'Find an Open Match',
+    'Rezervă un Teren': 'Book a Field',
+    'Cartier Favorit în Brașov': 'Preferred Neighborhood in Brașov',
+    'Toate cartierele din Brașov': 'All neighborhoods in Brașov',
+    'Scurtă Descriere / Bio': 'Short Description / Bio',
+    'ex: Joc din plăcere în timpul săptămânii după ora 19:00. Disponibil și ca rezervă de urgență.': 'e.g. I play for fun on weekdays after 7 PM. Available as an emergency substitute.',
+    'Utilizatorul nu a fost găsit.': 'User not found.',
+    'Un cont cu acest email există deja.': 'An account with this email already exists.',
+    'Email sau parolă incorectă.': 'Incorrect email or password.',
+    'Rolul selectat nu poate fi atribuit prin înregistrare publică.': 'The selected role cannot be assigned through public registration.',
+    'Token invalid.': 'Invalid token.',
+    'Schimbă în engleză': 'Switch to English',
+    'Schimbă în română': 'Switch to Romanian',
+  },
+};
+
+const LANGUAGE_STORAGE_KEY = 'matchup-language';
+
+interface LanguageContextValue {
+  language: Language;
+  setLanguage: (language: Language) => void;
+  t: (text: string) => string;
+}
+
+const LanguageContext = createContext<LanguageContextValue | null>(null);
+
+const getBrowserLanguage = (): Language => (
+  navigator.language.toLowerCase().startsWith('ro') ? 'ro' : 'en'
+);
+
+const getInitialLanguage = (): Language => {
+  const savedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+  return savedLanguage === 'ro' || savedLanguage === 'en'
+    ? savedLanguage
+    : getBrowserLanguage();
+};
+
+export const LanguageProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const [language, setLanguage] = useState<Language>(getInitialLanguage);
+
+  useEffect(() => {
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
+  }, [language]);
+
+  const value = useMemo(() => ({
+    language,
+    setLanguage,
+    t: (text: string) => translations[language][text] || text,
+  }), [language]);
+
+  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
+};
+
+export const useLanguage = (): LanguageContextValue => {
+  const context = useContext(LanguageContext);
+  if (!context) {
+    throw new Error('useLanguage must be used within a LanguageProvider');
+  }
+  return context;
+};

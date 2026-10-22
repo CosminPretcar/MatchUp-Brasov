@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Menu, X, PlusCircle, User as UserIcon } from 'lucide-react';
 import logoNavbar from '../assets/logo_navbar.svg';
 import { ProfileModal } from './ProfileModal';
+import { useLanguage } from '../context/LanguageContext';
 
 // Link sets for each user role
 const guestLinks = [
@@ -29,6 +30,7 @@ interface NavbarProps {
 }
 
 export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
+  const { language, setLanguage, t } = useLanguage();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
@@ -60,7 +62,7 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
               href={link.href} 
               className="px-4 py-2 rounded-xl text-sm font-semibold text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 inline-block"
             >
-              {link.label}
+              {t(link.label)}
             </a>
           ))}
         </nav>
@@ -92,7 +94,7 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
                       ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' 
                       : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
                   }`}>
-                    {isOwner ? 'Proprietar Teren' : 'Jucător'}
+                    {t(isOwner ? 'Proprietar Teren' : 'Jucător')}
                   </span>
                 </div>
 
@@ -108,7 +110,7 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
                   className="px-3.5 py-1.5 text-xs font-extrabold text-slate-950 bg-amber-500 hover:bg-amber-400 rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer shadow-md flex items-center gap-1.5"
                 >
                   <PlusCircle className="w-3.5 h-3.5" />
-                  Teren Nou
+                  {t('Teren Nou')}
                 </button>
               )}
 
@@ -118,7 +120,7 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
                 onClick={onLogout}
                 className="px-3.5 py-1.5 text-xs font-bold text-red-400 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 rounded-xl transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 cursor-pointer"
               >
-                Deconectare
+                {t('Deconectare')}
               </button>
             </div>
           ) : (
@@ -128,14 +130,14 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
                 onClick={() => onOpenAuth?.('login')}
                 className="px-4 py-2 rounded-xl text-sm font-semibold text-on-surface hover:text-primary hover:bg-surface-container/50 transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 cursor-pointer inline-block"
               >
-                Autentificare
+                {t('Autentificare')}
               </button>
               <button
                 type="button"
                 onClick={() => onOpenAuth?.('register')}
                 className="px-5 py-2.5 rounded-xl text-sm font-bold bg-primary-container text-on-primary-container shadow-[0_0_20px_-2px_rgba(16,185,129,0.3)] hover:brightness-110 hover:shadow-[0_0_25px_2px_rgba(16,185,129,0.5)] transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 cursor-pointer inline-block"
               >
-                Creează Cont
+                {t('Creează Cont')}
               </button>
             </>
           )}
@@ -145,7 +147,7 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
         <button
           type="button"
           className="lg:hidden p-2 rounded-xl text-on-surface hover:bg-surface-container transition-all duration-300 hover:scale-110 active:scale-90 cursor-pointer"
-          aria-label={isMenuOpen ? 'Închide meniul' : 'Deschide meniul'}
+          aria-label={t(isMenuOpen ? 'Închide meniul' : 'Deschide meniul')}
           aria-expanded={isMenuOpen}
           onClick={() => setIsMenuOpen((open) => !open)}
         >
@@ -164,7 +166,7 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
                 className="px-4 py-2.5 rounded-xl text-sm font-semibold text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all duration-200 active:scale-98"
                 onClick={() => setIsMenuOpen(false)}
               >
-                {link.label}
+                {t(link.label)}
               </a>
             ))}
 
@@ -194,7 +196,7 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
                         {user.fullName}
                       </span>
                       <span className="text-[10px] font-extrabold text-primary uppercase">
-                        {isOwner ? 'Proprietar Teren' : 'Jucător'}
+                        {t(isOwner ? 'Proprietar Teren' : 'Jucător')}
                       </span>
                     </div>
                   </div>
@@ -207,7 +209,7 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
                     }}
                     className="px-3 py-1.5 text-xs font-bold text-red-400 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 rounded-xl transition-all active:scale-95"
                   >
-                    Deconectare
+                    {t('Deconectare')}
                   </button>
                 </div>
               ) : (
@@ -219,13 +221,33 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
                   }}
                   className="w-full py-3 rounded-xl text-sm font-bold bg-primary-container text-on-primary-container text-center transition-all duration-300 ease-in-out hover:brightness-110 active:scale-95 cursor-pointer shadow-lg"
                 >
-                  Autentificare / Înregistrare
+                  {t('Autentificare')} / {t('Creează Cont')}
                 </button>
               )}
             </div>
           </div>
         </nav>
       )}
+
+      <button
+        type="button"
+        onClick={() => setLanguage(language === 'ro' ? 'en' : 'ro')}
+        role="switch"
+        aria-checked={language === 'en'}
+        className="absolute right-20 top-5 z-[60] flex h-8 w-[72px] items-center rounded-full border border-white/10 bg-surface-container-high p-1 text-[10px] font-extrabold text-on-surface shadow-xl transition hover:bg-surface-container-highest lg:right-6"
+        aria-label={language === 'ro' ? t('Schimbă în engleză') : t('Schimbă în română')}
+      >
+        <span className={`z-10 flex-1 text-center transition-colors ${language === 'ro' ? 'text-slate-950' : 'text-slate-400'}`}>
+          RO
+        </span>
+        <span className={`z-10 flex-1 text-center transition-colors ${language === 'en' ? 'text-slate-950' : 'text-slate-400'}`}>
+          EN
+        </span>
+        <span
+          aria-hidden="true"
+          className={`absolute top-1 h-6 w-8 rounded-full bg-primary transition-transform ${language === 'en' ? 'translate-x-8' : 'translate-x-0'}`}
+        />
+      </button>
 
       {/* Player profile modal */}
       {isPlayer && (
