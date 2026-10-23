@@ -39,6 +39,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
 
   useEffect(() => {
     if (isOpen) {
+      // Reset the controlled tab when the modal is opened with a new default.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setActiveTab(defaultTab);
     }
   }, [isOpen, defaultTab]);
@@ -93,8 +95,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
       localStorage.setItem('user', JSON.stringify(data));
       if (onSuccess) onSuccess(data);
       onClose();
-    } catch (err: any) {
-      setErrorMsg(err.message || t('A apărut o eroare la conectare.'));
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : t('A apărut o eroare la conectare.'));
     } finally {
       setLoading(false);
     }
@@ -132,8 +134,8 @@ const handleRegister = async (e: React.FormEvent) => {
     localStorage.setItem('user', JSON.stringify(data));
     if (onSuccess) onSuccess(data);
     onClose();
-  } catch (err: any) {
-    setErrorMsg(err.message || t('A apărut o eroare la înregistrare.'));
+  } catch (err: unknown) {
+    setErrorMsg(err instanceof Error ? err.message : t('A apărut o eroare la înregistrare.'));
   } finally {
     setLoading(false);
   }

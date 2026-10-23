@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { StatsTicker } from './components/StatsTicker';
@@ -18,6 +18,14 @@ import { useLanguage } from './context/LanguageContext';
 import { apiRequest } from './utils/api';
 import type { Field } from './types/field';
 
+type StoredUser = {
+  id?: string;
+  email?: string;
+  fullName?: string;
+  role?: number | string;
+  token?: string;
+};
+
 export function App() {
   const { t } = useLanguage();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -29,35 +37,34 @@ export function App() {
   const [fieldsError, setFieldsError] = useState<string | null>(null);
   const [fieldActionId, setFieldActionId] = useState<string | null>(null);
   const [fieldSuccess, setFieldSuccess] = useState<string | null>(null);
-  const [user, setUser] = useState(() => {
+  const [user, setUser] = useState<StoredUser | null>(() => {
     const saved = localStorage.getItem('user');
     if (!saved) return null;
-    const parsed = JSON.parse(saved);
+    let parsed: StoredUser;
+    try {
+      parsed = JSON.parse(saved);
+    } catch {
+      localStorage.removeItem('user');
+      return null;
+    }
     if (isTokenExpired(parsed?.token)) {
       localStorage.removeItem('user');
       return null;
     }
     return parsed;
   });
+  const handleLogout = useCallback(() => {
+    localStorage.removeItem('user');
+    setUser(null);
+  }, []);
 
   // Automatically log out when the JWT expires
   useEffect(() => {
     if (!user?.token) return;
     const ms = msUntilTokenExpiry(user.token);
-    if (ms <= 0) {
-      handleLogout();
-      return;
-    }
-    const timer = setTimeout(() => {
-      handleLogout();
-    }, ms);
+    const timer = setTimeout(handleLogout, ms);
     return () => clearTimeout(timer);
-  }, [user]);
-
-  const handleLogout = () => {
-    localStorage.removeItem('user');
-    setUser(null);
-  };
+  }, [handleLogout, user]);
 
   const handleOpenAuth = (tab: 'login' | 'register' = 'login') => {
     setAuthTab(tab);
@@ -68,7 +75,7 @@ export function App() {
   const isOwner = user?.role === 1 || user?.role === 'FieldOwner';
   const isPlayer = user && !isOwner;
 
-  const loadMyFields = async () => {
+  const loadMyFields = useCallback(async () => {
     if (!user?.token) return;
 
     setFieldsLoading(true);
@@ -80,7 +87,7 @@ export function App() {
     } finally {
       setFieldsLoading(false);
     }
-  };
+  }, [user?.token]);
 
   const updateFieldStatus = async (field: Field) => {
     setFieldActionId(field.id);
@@ -118,11 +125,11 @@ export function App() {
 
   useEffect(() => {
     if (isOwner) {
+      // Loading owner data is an external synchronization.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       void loadMyFields();
-    } else {
-      setFields([]);
     }
-  }, [isOwner, user?.token]);
+  }, [isOwner, loadMyFields]);
 
   return (
     <div className="min-h-screen bg-background text-on-background selection:bg-primary-container selection:text-on-primary-container">

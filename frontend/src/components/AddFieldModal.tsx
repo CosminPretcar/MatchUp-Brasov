@@ -33,6 +33,8 @@ export const AddFieldModal: React.FC<AddFieldModalProps> = ({ isOpen, onClose, o
 
   useEffect(() => {
     if (!isOpen) return;
+    // Form state mirrors the field selected by the parent when the modal opens.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setError(null);
     setFormData(field ? {
       name: field.name,

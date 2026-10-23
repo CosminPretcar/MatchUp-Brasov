@@ -3,7 +3,7 @@ import { Search, MapPin, Calendar, Clock, Trophy } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 export const Hero: React.FC = () => {
-  const { language, t } = useLanguage();
+  const { t } = useLanguage();
   return (
     <section id="gaseste-terenuri" className="relative w-full overflow-hidden px-6 pb-10 pt-6 md:pt-12">
       {/* Glow effects */}

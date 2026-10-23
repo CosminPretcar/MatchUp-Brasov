@@ -24,7 +24,11 @@ const ownerLinks = [
 ];
 
 interface NavbarProps {
-  user?: any;
+  user?: {
+    fullName?: string;
+    role?: number | string;
+    token?: string;
+  } | null;
   onOpenAuth?: (tab?: 'login' | 'register') => void;
   onLogout?: () => void;
 }
@@ -243,7 +247,7 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
         <ProfileModal
           isOpen={isProfileModalOpen}
           onClose={() => setIsProfileModalOpen(false)}
-          token={user.token}
+          token={user.token ?? ''}
         />
       )}
     </header>

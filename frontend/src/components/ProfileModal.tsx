@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { 
-  X, User, Shield, Trophy, MapPin, Phone, Mail, 
+  X, User, Shield, Trophy, MapPin, Phone,
   Save, CheckCircle2, AlertCircle, Sparkles, Footprints, Flame 
 } from 'lucide-react';
 import { playerTranslations, getLabel, type Language } from '../utils/translations';
@@ -72,7 +72,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
       return;
     }
     onClose();
-  }, [hasUnsavedChanges, onClose]);
+  }, [hasUnsavedChanges, onClose, t]);
 
   // Close on Escape
   useEffect(() => {
@@ -113,15 +113,15 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
           phoneNumber: data.phoneNumber || '',
           bio: data.bio || ''
         });
-      } catch (err: any) {
-        setErrorMsg(err.message || t('Profilul nu a putut fi încărcat. Încearcă din nou.'));
+      } catch (err: unknown) {
+        setErrorMsg(err instanceof Error ? err.message : t('Profilul nu a putut fi încărcat. Încearcă din nou.'));
       } finally {
         setLoading(false);
       }
     };
 
     fetchProfile();
-  }, [isOpen, token]);
+  }, [isOpen, t, token]);
 
   // Save the profile to the backend
   const handleSubmit = async (e: React.FormEvent) => {
@@ -162,8 +162,8 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
       setSuccessMsg(t('Profilul a fost actualizat cu succes!'));
       if (onProfileUpdated) onProfileUpdated();
       setTimeout(() => setSuccessMsg(''), 3000);
-    } catch (err: any) {
-      setErrorMsg(err.message || t('A apărut o eroare.'));
+    } catch (err: unknown) {
+      setErrorMsg(err instanceof Error ? err.message : t('A apărut o eroare.'));
     } finally {
       setSaving(false);
     }

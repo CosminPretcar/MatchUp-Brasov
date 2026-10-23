@@ -30,6 +30,8 @@ export function FieldsList() {
 
   useEffect(() => {
     const params = new URLSearchParams({ zone, sportsType });
+    // The request state is intentionally reset before each external fetch.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true);
     setError(null);
     apiRequest<Field[]>(`/api/field?${params}`)
