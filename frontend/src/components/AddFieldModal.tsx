@@ -115,7 +115,7 @@ export const AddFieldModal: React.FC<AddFieldModalProps> = ({ isOpen, onClose, o
     }}>
       <div className="relative w-full max-w-2xl rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl text-white my-8" role="dialog" aria-modal="true" aria-labelledby="field-modal-title">
         
-        {/* Header Modal */}
+        {/* Modal header */}
         <div className="flex items-center justify-between border-b border-slate-800 pb-4">
           <h2 id="field-modal-title" className="text-xl font-bold text-emerald-400">{field ? t('Editează terenul') : t('Adaugă Teren Nou')}</h2>
           <button
@@ -126,7 +126,7 @@ export const AddFieldModal: React.FC<AddFieldModalProps> = ({ isOpen, onClose, o
           </button>
         </div>
 
-        {/* Mesaj de eroare */}
+        {/* Error message */}
         {error && (
           <div className="mt-4 flex items-center gap-2 rounded-lg bg-red-500/10 border border-red-500/20 p-3 text-sm text-red-400">
             <AlertCircle className="h-5 w-5 shrink-0" />
@@ -134,13 +134,13 @@ export const AddFieldModal: React.FC<AddFieldModalProps> = ({ isOpen, onClose, o
           </div>
         )}
 
-        {/* Formular */}
+        {/* Form */}
         <form onSubmit={handleSubmit} className="mt-4 space-y-4">
           
-          {/* Nume Teren */}
+          {/* Field name */}
           <div>
             <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">
-              Nume Teren / Bază Sportivă
+              {t('Nume Teren / Bază Sportivă')}
             </label>
             <input
               type="text"
@@ -148,16 +148,16 @@ export const AddFieldModal: React.FC<AddFieldModalProps> = ({ isOpen, onClose, o
               required
               value={formData.name}
               onChange={handleChange}
-              placeholder="ex: Baza Sportivă ProSport Tractorul"
+              placeholder={t('ex: Baza Sportivă ProSport Tractorul')}
               className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none"
             />
           </div>
 
-          {/* Adresă și Cartier */}
+          {/* Address and neighborhood */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">
-                Adresă Fizică
+                {t('Adresă Fizică')}
               </label>
               <div className="relative">
                 <MapPin className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
@@ -167,7 +167,7 @@ export const AddFieldModal: React.FC<AddFieldModalProps> = ({ isOpen, onClose, o
                   required
                   value={formData.location}
                   onChange={handleChange}
-                  placeholder="ex: Str. Turnului nr. 5"
+                  placeholder={t('ex: Str. Turnului nr. 5')}
                   className="w-full rounded-lg border border-slate-800 bg-slate-950 pl-9 pr-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none"
                 />
               </div>
@@ -175,7 +175,7 @@ export const AddFieldModal: React.FC<AddFieldModalProps> = ({ isOpen, onClose, o
 
             <div>
               <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">
-                Cartier (Zona Brașov)
+                {t('Cartier (Zona Brașov)')}
               </label>
               <select
                 name="zone"
@@ -195,11 +195,11 @@ export const AddFieldModal: React.FC<AddFieldModalProps> = ({ isOpen, onClose, o
             </div>
           </div>
 
-          {/* Sport și Preț */}
+          {/* Sport and price */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">
-                Tip Sport
+                {t('Tip Sport')}
               </label>
               <div className="relative">
                 <Dumbbell className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
@@ -219,7 +219,7 @@ export const AddFieldModal: React.FC<AddFieldModalProps> = ({ isOpen, onClose, o
 
             <div>
               <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">
-                Preț / Oră (RON)
+                {t('Preț / Oră (RON)')}
               </label>
               <div className="relative">
                 <DollarSign className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
@@ -237,25 +237,25 @@ export const AddFieldModal: React.FC<AddFieldModalProps> = ({ isOpen, onClose, o
             </div>
           </div>
 
-          {/* Descriere */}
+          {/* Description */}
           <div>
             <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">
-              Descriere / Reguli Teren (Opțional)
+              {t('Descriere / Reguli Teren (Opțional)')}
             </label>
             <textarea
               name="description"
               rows={2}
               value={formData.description}
               onChange={handleChange}
-              placeholder="Detalii suplimentare despre suprafață, regulament etc."
+              placeholder={t('Detalii suplimentare despre suprafață, regulament etc.')}
               className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none resize-none"
             />
           </div>
 
-          {/* Facilități (Checkboxes) */}
+          {/* Amenities */}
           <div>
             <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
-              Facilități Disponibile
+              {t('Facilități Disponibile')}
             </label>
             <div className="grid grid-cols-2 gap-3">
               <label className={`flex items-center gap-2 p-3 rounded-lg border cursor-pointer transition-all ${
@@ -269,7 +269,7 @@ export const AddFieldModal: React.FC<AddFieldModalProps> = ({ isOpen, onClose, o
                   className="hidden"
                 />
                 <Sun className="h-4 w-4" />
-                <span className="text-xs font-medium">Nocturnă</span>
+                <span className="text-xs font-medium">{t('Nocturnă')}</span>
               </label>
 
               <label className={`flex items-center gap-2 p-3 rounded-lg border cursor-pointer transition-all ${
@@ -283,7 +283,7 @@ export const AddFieldModal: React.FC<AddFieldModalProps> = ({ isOpen, onClose, o
                   className="hidden"
                 />
                 <DoorClosed className="h-4 w-4" />
-                <span className="text-xs font-medium">Vestiare / Dușuri</span>
+                <span className="text-xs font-medium">{t('Vestiare / Dușuri')}</span>
               </label>
 
               <label className={`flex items-center gap-2 p-3 rounded-lg border cursor-pointer transition-all ${
@@ -297,7 +297,7 @@ export const AddFieldModal: React.FC<AddFieldModalProps> = ({ isOpen, onClose, o
                   className="hidden"
                 />
                 <Car className="h-4 w-4" />
-                <span className="text-xs font-medium">Parcare Proprie</span>
+                <span className="text-xs font-medium">{t('Parcare Proprie')}</span>
               </label>
 
               <label className={`flex items-center gap-2 p-3 rounded-lg border cursor-pointer transition-all ${
@@ -311,12 +311,12 @@ export const AddFieldModal: React.FC<AddFieldModalProps> = ({ isOpen, onClose, o
                   className="hidden"
                 />
                 <Shield className="h-4 w-4" />
-                <span className="text-xs font-medium">Teren Acoperit / Balon</span>
+                <span className="text-xs font-medium">{t('Teren Acoperit / Balon')}</span>
               </label>
             </div>
           </div>
 
-          {/* Butoane Acțiune */}
+          {/* Action buttons */}
           <div className="flex justify-end gap-3 border-t border-slate-800 pt-4 mt-6">
             <button
               type="button"

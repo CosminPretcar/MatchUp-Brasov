@@ -1,15 +1,11 @@
 import React from 'react';
-import { Search, MapPin, Calendar, Clock, Trophy } from 'lucide-react';
+import { Calendar, Trophy } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
 export const Hero: React.FC = () => {
   const { t } = useLanguage();
   return (
-    <section id="gaseste-terenuri" className="relative w-full overflow-hidden px-6 pb-10 pt-6 md:pt-12">
-      {/* Glow effects */}
-      <div className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[720px] h-[360px] bg-primary/15 blur-[120px] rounded-full"></div>
-      <div className="pointer-events-none absolute top-72 -left-32 w-80 h-80 bg-secondary/10 blur-[100px] rounded-full"></div>
-
+    <section className="relative w-full px-6 pb-10 pt-6 md:pt-12">
       <div className="max-w-7xl mx-auto flex flex-col gap-10 relative z-10">
         
         {/* Section Title and Main Description */}
@@ -38,53 +34,6 @@ export const Hero: React.FC = () => {
               {t('Rezervă un Teren')}
             </a>
           </div>
-        </div>
-
-        {/* Search Bar */}
-        <div className="w-full bg-surface-container/85 backdrop-blur-xl p-4 md:p-6 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.55)]">
-          <form className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-            
-            <div className="flex flex-col gap-1">
-              <label className="text-xs font-bold text-on-surface-variant flex items-center gap-1">
-                <MapPin className="w-4 h-4 text-primary" /> {t('Zona / Cartier Brașov')}
-              </label>
-              <select className="w-full h-12 bg-surface-container-high text-on-surface text-sm rounded-xl px-4 appearance-none focus:outline-none cursor-pointer">
-                <option value="toate">{t('Toate cartierele')}</option>
-                <option value="tractorul">{t('Tractorul (Rulmentul & Coresi)')}</option>
-                <option value="astra">{t('Astra / Saturn')}</option>
-                <option value="bartolomeu">{t('Bartolomeu & Stadionului')}</option>
-                <option value="noua">{t('Noua & Dârste')}</option>
-              </select>
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <label className="text-xs font-bold text-on-surface-variant flex items-center gap-1">
-                <Calendar className="w-4 h-4 text-primary" /> {t('Data Meciului')}
-              </label>
-              <select className="w-full h-12 bg-surface-container-high text-on-surface text-sm rounded-xl px-4 appearance-none focus:outline-none cursor-pointer">
-                <option>{t('Azi, 24 Mai')}</option>
-                <option>{t('Mâine, 25 Mai')}</option>
-                <option>{t('Sâmbătă (Weekend)')}</option>
-              </select>
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <label className="text-xs font-bold text-on-surface-variant flex items-center gap-1">
-                <Clock className="w-4 h-4 text-primary" /> {t('Interval Orar')}
-              </label>
-              <select className="w-full h-12 bg-surface-container-high text-on-surface text-sm rounded-xl px-4 appearance-none focus:outline-none cursor-pointer">
-                <option>{t('20:00 - 22:00 (Nocturnă Prime)')}</option>
-                <option>{t('18:00 - 20:00 (După job)')}</option>
-                <option>{t('22:00 - 24:00 (Late kick)')}</option>
-              </select>
-            </div>
-
-            <button type="button" className="w-full h-12 bg-primary text-on-primary font-bold text-sm rounded-xl flex items-center justify-center gap-2 shadow-[0_0_20px_-2px_rgba(78,222,163,0.35)] hover:bg-primary/90 transition-all">
-              <Search className="w-5 h-5" />
-              <span>{t('Găsește Terenuri')}</span>
-            </button>
-
-          </form>
         </div>
 
       </div>

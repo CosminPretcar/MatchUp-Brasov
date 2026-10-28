@@ -15,12 +15,14 @@ const guestLinks = [
 const playerLinks = [
   { href: '#gaseste-terenuri', label: 'Găsește Terenuri' },
   { href: '#meciuri-active', label: 'Meciuri Deschise' },
+  { href: '#rezervarile-mele', label: 'Rezervările mele' },
   { href: '#faq', label: 'FAQ' },
 ];
 
 const ownerLinks = [
   { href: '#panou-proprietari', label: 'Panou Administrare' },
-  { href: '#faq', label: 'Ajutor & Suport' },
+  { href: '#terenurile-mele', label: 'Terenurile mele' },
+  { href: '#rezervari-primite', label: 'Rezervări primite' },
 ];
 
 interface NavbarProps {
@@ -53,7 +55,7 @@ export const Navbar = ({ user, onOpenAuth, onLogout }: NavbarProps) => {
         
         {/* Logo */}
         <div className="flex items-center gap-2">
-          <a href="#" className="font-headline text-lg text-on-surface tracking-tight font-bold transition-transform duration-300 hover:scale-105 active:scale-95 inline-block">
+          <a href="#top" className="font-headline text-lg text-on-surface tracking-tight font-bold transition-transform duration-300 hover:scale-105 active:scale-95 inline-block">
             <img src={logoNavbar} alt="Matchup Brașov" className="h-16 w-auto object-contain" />
           </a>
         </div>

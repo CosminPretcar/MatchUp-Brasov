@@ -10,6 +10,7 @@ namespace MatchUp.Api.Data
         public DbSet<User> Users { get; set; }
         public DbSet<PlayerProfile> PlayerProfiles { get; set; }
         public DbSet<Field> Fields { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -34,6 +35,23 @@ namespace MatchUp.Api.Data
                 .WithMany()
                 .HasForeignKey(f => f.OwnerId)
                 .OnDelete(DeleteBehavior.Cascade); // Ensure that deleting a User also deletes the associated Fields
+
+            modelBuilder.Entity<Booking>()
+                .Property(b => b.Status)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<Booking>()
+                .HasOne(b => b.Field)
+                .WithMany()
+                .HasForeignKey(b => b.FieldId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Booking>()
+                .HasOne(b => b.Player)
+                .WithMany()
+                .HasForeignKey(b => b.PlayerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }
