@@ -162,6 +162,15 @@ public class FieldController : ControllerBase
         if (!IsAdmin() && !IsCurrentOwner(field.OwnerId))
             return Forbid();
 
+        var hasBookings = await _context.Bookings.AnyAsync(b => b.FieldId == id);
+        if (hasBookings)
+        {
+            return Conflict(new
+            {
+                message = "Terenul nu poate fi șters deoarece are rezervări în istoric. Dezactivează-l în schimb."
+            });
+        }
+
         _context.Fields.Remove(field);
         await _context.SaveChangesAsync();
         return NoContent();

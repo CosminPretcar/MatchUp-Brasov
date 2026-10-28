@@ -4,7 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 export const Footer: React.FC = () => {
   const { t } = useLanguage();
   return (
-    <footer className="w-full bg-surface-container-lowest">
+    <footer className="w-full bg-transparent">
       <div className="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex flex-col items-center md:items-start gap-2">
           <span className="text-base font-bold text-on-surface">MatchUp Brașov</span>

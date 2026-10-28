@@ -12,6 +12,8 @@ import { Footer } from './components/Footer';
 import { AuthModal } from './components/AuthModal';
 import { AddFieldModal } from './components/AddFieldModal';
 import { FieldsList } from './components/FieldsList';
+import { MyBookings } from './components/MyBookings';
+import { OwnerBookings } from './components/OwnerBookings';
 import { isTokenExpired, msUntilTokenExpiry } from './utils/auth';
 import { Building2, MapPin, Pencil, PlusCircle, Power, Trash2 } from 'lucide-react';
 import { useLanguage } from './context/LanguageContext';
@@ -132,7 +134,15 @@ export function App() {
   }, [isOwner, loadMyFields]);
 
   return (
-    <div className="min-h-screen bg-background text-on-background selection:bg-primary-container selection:text-on-primary-container">
+    <div
+      id="top"
+      className="min-h-screen bg-background text-on-background selection:bg-primary-container selection:text-on-primary-container"
+      style={{
+        backgroundImage:
+          'radial-gradient(circle at 12% 18%, rgba(16, 185, 129, 0.12), transparent 28%), radial-gradient(circle at 88% 42%, rgba(16, 185, 129, 0.1), transparent 30%), radial-gradient(circle at 48% 88%, rgba(78, 222, 163, 0.08), transparent 26%)',
+        backgroundAttachment: 'fixed',
+      }}
+    >
       <Navbar 
         user={user} 
         onOpenAuth={handleOpenAuth} 
@@ -142,7 +152,7 @@ export function App() {
       <main className="pt-20">
         {/* 1. FIELD OWNER VIEW */}
         {isOwner && (
-          <div className="max-w-7xl mx-auto px-6 py-10 space-y-8">
+          <div id="panou-proprietari" className="max-w-7xl mx-auto px-6 py-10 space-y-8">
             <div className="bg-surface-container-low p-8 rounded-3xl border border-surface-container-high shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
               <div>
                 <span className="px-3 py-1 rounded-full bg-amber-500/20 text-amber-400 text-xs font-bold uppercase tracking-wider border border-amber-500/30">
@@ -193,7 +203,7 @@ export function App() {
               </div>
             </div>
 
-            <section className="space-y-4">
+            <section id="terenurile-mele" className="scroll-mt-24 space-y-4">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-bold text-on-surface">{t('Terenurile mele')}</h2>
                 {fieldsLoading && (
@@ -258,8 +268,8 @@ export function App() {
               </div>
             </section>
 
-            {/* B2BCallout component for the owner dashboard */}
-            <B2BCallout />
+            <OwnerBookings />
+
           </div>
         )}
 
@@ -268,6 +278,7 @@ export function App() {
           <>
             <Hero />
             <FieldsList />
+            <MyBookings />
             <StatsTicker />
             <LiveMatches />
             <Faq />
@@ -278,7 +289,7 @@ export function App() {
         {!user && (
           <>
             <Hero />
-            <FieldsList />
+            <FieldsList onRequireAuth={() => handleOpenAuth('login')} />
             <StatsTicker />
             <Features />
             <HowItWorks />
